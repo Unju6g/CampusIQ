@@ -473,7 +473,7 @@ function Register() {
               handleRoleChange("student")
             }
           >
-            <span>🎓</span>
+            <span>🎓 </span>
             Student
           </button>
 
@@ -489,7 +489,7 @@ function Register() {
               handleRoleChange("tpo")
             }
           >
-            <span>🏢</span>
+            <span>🏢 </span>
             TPO / Admin
           </button>
 
@@ -581,7 +581,7 @@ function Register() {
                     <div className="input-wrapper">
 
                       <span className="input-icon">
-                        👤
+                        👤 
                       </span>
 
 
@@ -610,7 +610,7 @@ function Register() {
                     <div className="input-wrapper">
 
                       <span className="input-icon">
-                        🎓
+                        🎓 
                       </span>
 
 
@@ -668,7 +668,7 @@ function Register() {
                     <div className="input-wrapper">
 
                       <span className="input-icon">
-                        ☎
+                        ☎ 
                       </span>
 
 
@@ -704,7 +704,7 @@ function Register() {
                     <div className="input-wrapper">
 
                       <span className="input-icon">
-                        ✉
+                        ✉ 
                       </span>
 
 
@@ -728,259 +728,221 @@ function Register() {
           )}
 
 
-          {/* =================================================
-              STUDENT STEP 2
-          ================================================= */}
+         {/* =================================================
+    STUDENT STEP 2
+================================================= */}
 
-          {step === 2 &&
-            role === "student" && (
+{step === 2 &&
+  role === "student" && (
 
-            <>
-              <h3>
-                Academic Information
-              </h3>
+  <>
+    <h3>
+      Academic Information
+    </h3>
 
+    <div className="form-grid">
 
-              <div className="form-grid">
+      {/* BRANCH */}
+      <div className="form-field">
 
+        <label>
+          <span className="label-icon">🎓</span>
+          Branch *
+        </label>
 
-                {/* BRANCH */}
+        <div className="select-wrapper">
 
-                <div className="form-field">
+          <select
+            name="branch"
+            value={formData.branch}
+            onChange={handleChange}
+          >
 
-                  <label>
-                    Branch *
-                  </label>
+            <option value="">
+              Select Branch
+            </option>
 
+            <option value="ECM">
+              Electronics & Computer Engineering
+            </option>
 
-                  <div className="select-wrapper">
+            <option value="CSE">
+              Computer Science Engineering
+            </option>
 
-                    <span className="input-icon">
-                      🎓
-                    </span>
+            <option value="IT">
+              Information Technology
+            </option>
 
+          </select>
 
-                    <select
-                      name="branch"
-                      value={formData.branch}
-                      onChange={handleChange}
-                    >
+        </div>
 
-                      <option value="">
-                        Select Branch
-                      </option>
+      </div>
 
 
-                      <option value="ECM">
-                        Electronics & Computer Engineering
-                      </option>
+      {/* PASSING YEAR */}
+      <div className="form-field">
 
+        <label>
+          <span className="label-icon">📅</span>
+          Passing Year
+        </label>
 
-                      <option value="CSE">
-                        Computer Science Engineering
-                      </option>
+        <div className="select-wrapper">
 
+          <select
+            name="passingYear"
+            value={formData.passingYear}
+            onChange={handleChange}
+          >
 
-                      <option value="IT">
-                        Information Technology
-                      </option>
+            <option value="">
+              Select Year
+            </option>
 
-                    </select>
+            <option value="2026">
+              2026
+            </option>
 
-                  </div>
+            <option value="2027">
+              2027
+            </option>
 
-                </div>
+            <option value="2028">
+              2028
+            </option>
 
+            <option value="2029">
+              2029
+            </option>
 
-                {/* PASSING YEAR */}
+          </select>
 
-                <div className="form-field">
+        </div>
 
-                  <label>
-                    Passing Year
-                  </label>
+      </div>
 
 
-                  <div className="select-wrapper">
+      {/* SEMESTER */}
+      <div className="form-field">
 
-                    <span className="input-icon">
-                      📅
-                    </span>
+        <label>
+          <span className="label-icon">📚</span>
+          Current Semester
+        </label>
 
+        <div className="select-wrapper">
 
-                    <select
-                      name="passingYear"
-                      value={formData.passingYear}
-                      onChange={handleChange}
-                    >
+          <select
+            name="semester"
+            value={formData.semester}
+            onChange={handleChange}
+          >
 
-                      <option value="">
-                        Select Year
-                      </option>
+            <option value="">
+              Select Semester
+            </option>
 
-                      <option value="2026">
-                        2026
-                      </option>
+            <option value="1">
+              1st
+            </option>
 
-                      <option value="2027">
-                        2027
-                      </option>
+            <option value="2">
+              2nd
+            </option>
 
-                      <option value="2028">
-                        2028
-                      </option>
+            <option value="3">
+              3rd
+            </option>
 
-                      <option value="2029">
-                        2029
-                      </option>
+            <option value="4">
+              4th
+            </option>
 
-                    </select>
+            <option value="5">
+              5th
+            </option>
 
-                  </div>
+            <option value="6">
+              6th
+            </option>
 
-                </div>
+            <option value="7">
+              7th
+            </option>
 
+            <option value="8">
+              8th
+            </option>
 
-                {/* SEMESTER */}
+          </select>
 
-                <div className="form-field">
+        </div>
 
-                  <label>
-                    Current Semester
-                  </label>
+      </div>
 
 
-                  <div className="select-wrapper">
+      {/* CGPA */}
+      <div className="form-field">
 
-                    <span className="input-icon">
-                      📚
-                    </span>
+        <label>
+          <span className="label-icon">⭐</span>
+          CGPA
+        </label>
 
+        <div className="input-wrapper">
 
-                    <select
-                      name="semester"
-                      value={formData.semester}
-                      onChange={handleChange}
-                    >
+          <input
+            type="number"
+            step="0.001"
+            min="0"
+            max="10"
+            name="cgpa"
+            placeholder="Enter CGPA"
+            value={formData.cgpa}
+            onChange={handleChange}
+          />
 
-                      <option value="">
-                        Select Semester
-                      </option>
+        </div>
 
-                      <option value="1">
-                        1st
-                      </option>
+        <small className="field-help">
+          Enter a value between 0.0 and 10.0
+        </small>
 
-                      <option value="2">
-                        2nd
-                      </option>
+      </div>
 
-                      <option value="3">
-                        3rd
-                      </option>
 
-                      <option value="4">
-                        4th
-                      </option>
+      {/* BACKLOGS */}
+      <div className="form-field">
 
-                      <option value="5">
-                        5th
-                      </option>
+        <label>
+          <span className="label-icon">📋</span>
+          Active Backlogs
+        </label>
 
-                      <option value="6">
-                        6th
-                      </option>
+        <div className="input-wrapper">
 
-                      <option value="7">
-                        7th
-                      </option>
+          <input
+            type="number"
+            min="0"
+            name="backlogs"
+            placeholder="Enter number of backlogs"
+            value={formData.backlogs}
+            onChange={handleChange}
+          />
 
-                      <option value="8">
-                        8th
-                      </option>
+        </div>
 
-                    </select>
+        <small className="field-help">
+          Enter 0 if you have no active backlogs.
+        </small>
 
-                  </div>
+      </div>
 
-                </div>
-
-
-                {/* CGPA */}
-
-                <div className="form-field">
-
-                  <label>
-                    CGPA
-                  </label>
-
-
-                  <div className="input-wrapper">
-
-                    <span className="input-icon">
-                      ⭐
-                    </span>
-
-
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="10"
-                      name="cgpa"
-                      placeholder="Enter CGPA"
-                      value={formData.cgpa}
-                      onChange={handleChange}
-                    />
-
-                  </div>
-
-
-                  <small className="field-help">
-                    Enter a value between 0.0 and 10.0
-                  </small>
-
-                </div>
-
-
-                {/* BACKLOGS */}
-
-                <div className="form-field">
-
-                  <label>
-                    Active Backlogs
-                  </label>
-
-
-                  <div className="input-wrapper">
-
-                    <span className="input-icon">
-                      📋
-                    </span>
-
-
-                    <input
-                      type="number"
-                      min="0"
-                      name="backlogs"
-                      placeholder="Enter number of backlogs"
-                      value={formData.backlogs}
-                      onChange={handleChange}
-                    />
-
-                  </div>
-
-
-                  <small className="field-help">
-                    Enter 0 if you have no active backlogs.
-                  </small>
-
-                </div>
-
-              </div>
-            </>
-          )}
-
+    </div>
+  </>
+)}
 
           {/* =================================================
               TPO STEP 2
