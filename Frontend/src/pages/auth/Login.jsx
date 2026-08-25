@@ -2,14 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
-// IMPORTANT:
-// Make sure this file actually exists inside:
-// src/assets/
+// CampusIQ Logo
 import campusiqLogo from "../../assets/campusiq-header.png";
 
 
 function Login() {
+
   const navigate = useNavigate();
+
 
   /* =====================================================
      STATE
@@ -23,6 +23,7 @@ function Login() {
   });
 
   const [error, setError] = useState("");
+
   const [loading, setLoading] = useState(false);
 
 
@@ -31,6 +32,7 @@ function Login() {
   ===================================================== */
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -47,7 +49,9 @@ function Login() {
   ===================================================== */
 
   const handleRoleChange = (selectedRole) => {
+
     setRole(selectedRole);
+
     setError("");
   };
 
@@ -57,103 +61,95 @@ function Login() {
   ===================================================== */
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
 
     setError("");
 
 
-    /* -----------------------------
+    /* ==========================================
        VALIDATION
-    ----------------------------- */
+    ========================================== */
 
     if (!formData.email.trim()) {
+
       setError("Please enter your college email.");
+
       return;
     }
 
 
     if (!formData.password) {
+
       setError("Please enter your password.");
+
       return;
     }
 
 
     try {
+
       setLoading(true);
 
 
-      /*
-       * =================================================
-       * KEEP YOUR EXISTING BACKEND LOGIN CODE HERE
-       * =================================================
-       *
-       * Example:
-       *
-       * const response = await fetch(
-       *   "http://localhost:5000/api/auth/login",
-       *   {
-       *     method: "POST",
-       *     headers: {
-       *       "Content-Type": "application/json",
-       *     },
-       *     body: JSON.stringify({
-       *       email: formData.email,
-       *       password: formData.password,
-       *       role: role,
-       *     }),
-       *   }
-       * );
-       *
-       * const data = await response.json();
-       *
-       * if (!response.ok) {
-       *   throw new Error(
-       *     data.message || "Invalid email or password."
-       *   );
-       * }
-       *
-       * localStorage.setItem(
-       *   "token",
-       *   data.token
-       * );
-       *
-       * if (role === "student") {
-       *   navigate("/student/dashboard");
-       * } else {
-       *   navigate("/tpo/dashboard");
-       * }
-       */
+      /* ==========================================
+         TEMPORARY LOGIN
+
+         Later we will replace this with
+         your backend API.
+      ========================================== */
 
 
-      /*
-       * TEMPORARY:
-       * Remove this part when your backend login
-       * is connected.
-       */
+      const user = {
 
-      console.log("Login details:", {
+        name: formData.email
+          .split("@")[0],
+
         email: formData.email,
-        password: formData.password,
+
         role: role,
-      });
+
+      };
 
 
-      // Temporary navigation example.
-      // Change these routes according to your project.
+      /* ==========================================
+         SAVE USER TO LOCAL STORAGE
+      ========================================== */
+
+      localStorage.setItem(
+        "campusiqUser",
+        JSON.stringify(user)
+      );
+
+
+      /* ==========================================
+         REDIRECT BASED ON ROLE
+      ========================================== */
+
       if (role === "student") {
+
         navigate("/student/dashboard");
+
       } else {
-        navigate("/tpo/dashboard");
+
+        navigate("/admin/dashboard");
+
       }
 
 
     } catch (err) {
+
       setError(
-        err.message || "Unable to login. Please try again."
+        err.message ||
+        "Unable to login. Please try again."
       );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
 
@@ -162,7 +158,9 @@ function Login() {
   ===================================================== */
 
   return (
+
     <div className="auth-page login-page">
+
 
       <div className="auth-card login-card">
 
@@ -172,6 +170,7 @@ function Login() {
         ================================================= */}
 
         <div className="auth-header login-header">
+
 
           {/* CampusIQ Logo */}
 
@@ -193,14 +192,18 @@ function Login() {
           {/* Heading */}
 
           <h1 className="auth-heading">
+
             Welcome Back
+
           </h1>
 
 
           {/* Subtitle */}
 
           <p className="auth-subtitle">
+
             Login to continue to your CampusIQ portal.
+
           </p>
 
         </div>
@@ -212,7 +215,8 @@ function Login() {
 
         <div className="role-switcher login-role-switcher">
 
-          {/* Student */}
+
+          {/* STUDENT */}
 
           <button
             type="button"
@@ -277,18 +281,24 @@ function Login() {
 
           <div className="form-field login-field">
 
+
             <label htmlFor="email">
+
               College Email
+
             </label>
 
 
             <div className="input-wrapper">
 
+
               <span
                 className="input-icon"
                 aria-hidden="true"
               >
+
                 ✉
+
               </span>
 
 
@@ -313,18 +323,24 @@ function Login() {
 
           <div className="form-field login-field">
 
+
             <label htmlFor="password">
+
               Password
+
             </label>
 
 
             <div className="input-wrapper">
 
+
               <span
                 className="input-icon"
                 aria-hidden="true"
               >
+
                 🔒
+
               </span>
 
 
@@ -350,7 +366,9 @@ function Login() {
           <div className="forgot-link">
 
             <Link to="/forgot-password">
+
               Forgot password?
+
             </Link>
 
           </div>
@@ -364,13 +382,20 @@ function Login() {
 
             <div className="auth-error">
 
+
               <span aria-hidden="true">
+
                 !
+
               </span>
 
+
               <span>
+
                 {error}
+
               </span>
+
 
             </div>
 
@@ -389,9 +414,11 @@ function Login() {
 
             {loading
               ? "Logging in..."
-              : "Login"}
+              : "Login"
+            }
 
           </button>
+
 
         </form>
 
@@ -405,7 +432,9 @@ function Login() {
           Don't have an account?{" "}
 
           <Link to="/register">
+
             Create Account
+
           </Link>
 
         </p>
@@ -419,13 +448,18 @@ function Login() {
           to="/"
           className="back-home"
         >
+
           ← Back to Home
+
         </Link>
+
 
       </div>
 
     </div>
+
   );
+
 }
 
 

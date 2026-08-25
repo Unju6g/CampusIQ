@@ -1,18 +1,43 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// Pages
+// =====================================================
+// MAIN PAGES
+// =====================================================
+
 import Landing from "./pages/Landing";
+
+// =====================================================
+// AUTHENTICATION
+// =====================================================
+
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
-// Dashboards
+// =====================================================
+// STUDENT PAGES
+// =====================================================
+
 import StudentDashboard from "./pages/student/StudentDashboard";
+import Profile from "./pages/student/Profile";
+import Academics from "./pages/student/Academics";
+import Certifications from "./pages/student/Certifications";
+import Projects from "./pages/student/Projects";
+import Skills from "./pages/student/Skills";
+import ResumeAnalyzer from "./pages/student/ResumeAnalyzer";
+import PlacementReadiness from "./pages/student/PlacementReadiness";
+import ReadinessRoadmap from "./pages/student/ReadinessRoadmap";
+import EligibleDrives from "./pages/student/EligibleDrives";
+import NoticeBoard from "./pages/student/NoticeBoard";
+
+// =====================================================
+// TPO
+// =====================================================
+
 import TPODashboard from "./pages/tpo/TPODashboard";
 
-
-/* ================================
-   PROTECTED ROUTE
-================================ */
+// =====================================================
+// PROTECTED ROUTE
+// =====================================================
 
 function ProtectedRoute({ children, role }) {
   const storedUser = localStorage.getItem("campusiqUser");
@@ -22,40 +47,48 @@ function ProtectedRoute({ children, role }) {
     return <Navigate to="/login" replace />;
   }
 
-  const user = JSON.parse(storedUser);
+  let user;
+
+  try {
+    user = JSON.parse(storedUser);
+  } catch (error) {
+    localStorage.removeItem("campusiqUser");
+    return <Navigate to="/login" replace />;
+  }
 
   // User has wrong role
   if (user.role !== role) {
+    if (user.role === "student") {
+      return <Navigate to="/student/dashboard" replace />;
+    }
+
+    if (user.role === "tpo") {
+      return <Navigate to="/admin/dashboard" replace />;
+    }
+
     return <Navigate to="/login" replace />;
   }
 
   return children;
 }
 
-
-/* ================================
-   APP
-================================ */
+// =====================================================
+// APP
+// =====================================================
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
-        {/* =========================
-            LANDING PAGE
-        ========================= */}
+        {/* ================= HOME ================= */}
 
         <Route
           path="/"
           element={<Landing />}
         />
 
-
-        {/* =========================
-            AUTHENTICATION
-        ========================= */}
+        {/* ================= AUTH ================= */}
 
         <Route
           path="/login"
@@ -67,10 +100,7 @@ function App() {
           element={<Register />}
         />
 
-
-        {/* =========================
-            STUDENT DASHBOARD
-        ========================= */}
+        {/* ================= STUDENT ================= */}
 
         <Route
           path="/student/dashboard"
@@ -81,10 +111,97 @@ function App() {
           }
         />
 
+        <Route
+          path="/student/profile"
+          element={
+            <ProtectedRoute role="student">
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* =========================
-            TPO DASHBOARD
-        ========================= */}
+        <Route
+          path="/student/academics"
+          element={
+            <ProtectedRoute role="student">
+              <Academics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/certifications"
+          element={
+            <ProtectedRoute role="student">
+              <Certifications />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/projects"
+          element={
+            <ProtectedRoute role="student">
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/skills"
+          element={
+            <ProtectedRoute role="student">
+              <Skills />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/resume"
+          element={
+            <ProtectedRoute role="student">
+              <ResumeAnalyzer />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/readiness"
+          element={
+            <ProtectedRoute role="student">
+              <PlacementReadiness />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/roadmap"
+          element={
+            <ProtectedRoute role="student">
+              <ReadinessRoadmap />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/drives"
+          element={
+            <ProtectedRoute role="student">
+              <EligibleDrives />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/notices"
+          element={
+            <ProtectedRoute role="student">
+              <NoticeBoard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= TPO ================= */}
 
         <Route
           path="/admin/dashboard"
@@ -95,10 +212,7 @@ function App() {
           }
         />
 
-
-        {/* =========================
-            INVALID URL
-        ========================= */}
+        {/* ================= INVALID URL ================= */}
 
         <Route
           path="*"
@@ -106,7 +220,6 @@ function App() {
         />
 
       </Routes>
-
     </BrowserRouter>
   );
 }

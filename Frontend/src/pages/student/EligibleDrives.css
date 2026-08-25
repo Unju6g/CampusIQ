@@ -1,0 +1,869 @@
+/* =====================================================
+   ELIGIBLE DRIVES PAGE
+===================================================== */
+
+.eligible-drives-page {
+  min-height: 100vh;
+  padding: 28px 34px 50px;
+  background: #061426;
+  color: #f5f7fb;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.drives-page-header {
+  margin-bottom: 28px;
+}
+
+.drives-eyebrow {
+  margin: 0 0 7px;
+  color: #2ca7ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.drives-page-header h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.drives-subtitle {
+  margin: 8px 0 0;
+  color: #8ca8c2;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   SECTION HEADER
+===================================================== */
+
+.drives-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.drives-section-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 750;
+}
+
+.drives-section-header p {
+  margin: 5px 0 0;
+  color: #7896b1;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   FILTER / SORT CONTROLS
+===================================================== */
+
+.drive-controls {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+
+  padding: 16px;
+
+  margin-bottom: 20px;
+
+  background: #0b2b40;
+  border: 1px solid #174e6c;
+  border-radius: 12px;
+
+  box-sizing: border-box;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.filter-group label {
+  color: #91acc4;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.filter-group select {
+  width: 100%;
+  min-height: 40px;
+
+  padding: 0 12px;
+
+  border: 1px solid #205776;
+  border-radius: 8px;
+
+  background: #071e31;
+  color: #eaf3fa;
+
+  font-size: 13px;
+  outline: none;
+
+  cursor: pointer;
+}
+
+.filter-group select:hover {
+  border-color: #2a91c9;
+}
+
+.filter-group select:focus {
+  border-color: #2ca7ff;
+  box-shadow:
+    0 0 0 2px
+    rgba(44, 167, 255, 0.12);
+}
+
+
+/* =====================================================
+   DRIVES GRID
+===================================================== */
+
+.drives-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+
+  width: 100%;
+}
+
+
+/* =====================================================
+   DRIVE CARD
+===================================================== */
+
+.placement-drive-card {
+  position: relative;
+
+  padding: 20px;
+
+  background: #0a293d;
+
+  border: 1px solid #185474;
+  border-radius: 14px;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.placement-drive-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #2b91c7;
+
+  box-shadow:
+    0 8px 24px
+    rgba(0, 0, 0, 0.18);
+}
+
+.placement-drive-card.drive-not-eligible {
+  border-color: #274354;
+}
+
+
+/* =====================================================
+   TOP AREA
+===================================================== */
+
+.drive-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.company-logo-box {
+  flex: 0 0 48px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #123e59;
+
+  border: 1px solid #205f7f;
+  border-radius: 10px;
+
+  color: #63c2ff;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+}
+
+.drive-title {
+  min-width: 0;
+  flex: 1;
+}
+
+.drive-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.drive-title h3 {
+  margin: 0;
+
+  color: #f5f8fb;
+
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+.drive-title p {
+  margin: 5px 0 0;
+
+  color: #80a6c2;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   DRIVE TYPE
+===================================================== */
+
+.drive-type-badge {
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.drive-type-badge.off-campus {
+  background: rgba(155, 89, 182, 0.14);
+  border: 1px solid #7e5a98;
+  color: #cba9e0;
+}
+
+.drive-type-badge.referral {
+  background: rgba(243, 156, 18, 0.12);
+  border: 1px solid #8d672c;
+  color: #f2bd62;
+}
+
+
+/* =====================================================
+   ELIGIBILITY BADGES
+===================================================== */
+
+.eligibility-badge {
+  flex-shrink: 0;
+
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
+  font-size: 11px;
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.eligibility-badge.eligible {
+  background: rgba(43, 191, 124, 0.13);
+  border: 1px solid #287c5c;
+  color: #61d7a2;
+}
+
+.eligibility-badge.not-eligible {
+  background: rgba(150, 160, 170, 0.1);
+  border: 1px solid #56626d;
+  color: #9ba7b1;
+}
+
+
+/* =====================================================
+   DETAIL GRID
+===================================================== */
+
+.drive-details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 20px;
+  padding-top: 17px;
+
+  border-top: 1px solid #153f57;
+}
+
+.drive-detail-item {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.detail-icon {
+  flex: 0 0 30px;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #123b55;
+
+  border: 1px solid #1d5c7c;
+  border-radius: 8px;
+
+  color: #62bfff;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.drive-detail-item div:last-child {
+  min-width: 0;
+}
+
+.drive-detail-item span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #7898b0;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.drive-detail-item strong {
+  display: block;
+
+  color: #eaf3fa;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   DEADLINE
+===================================================== */
+
+.deadline-urgent {
+  color: #ff9d58 !important;
+}
+
+.deadline-icon {
+  color: #ff9d58;
+  border-color: #855a36;
+}
+
+.closing-soon {
+  display: inline-block;
+
+  margin-left: 6px;
+
+  color: #ff9d58;
+
+  font-size: 9px;
+  font-weight: 750;
+
+  text-transform: uppercase;
+}
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.drive-description {
+  margin: 17px 0 0;
+
+  color: #8ba9bf;
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+
+/* =====================================================
+   REQUIRED SKILLS
+===================================================== */
+
+.required-skills-section {
+  margin-top: 18px;
+}
+
+.required-skills-title {
+  margin-bottom: 9px;
+
+  color: #b9cbd8;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.drive-skill-tag {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 27px;
+
+  padding: 4px 9px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.drive-skill-tag.skill-match {
+  background: rgba(39, 192, 125, 0.13);
+
+  border: 1px solid #2c8966;
+
+  color: #6dd9a7;
+}
+
+.drive-skill-tag.skill-missing {
+  background: transparent;
+
+  border: 1px solid #3b596c;
+
+  color: #839aaa;
+}
+
+.no-skills {
+  color: #718a9d;
+  font-size: 11px;
+}
+
+.skill-match-help {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 9px;
+
+  color: #69869b;
+
+  font-size: 10px;
+}
+
+.skill-match-help > span:first-child {
+  color: #61d7a2;
+  font-weight: 800;
+}
+
+.missing-dot {
+  margin-left: 5px;
+  color: #7e93a3;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.drive-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 20px;
+  padding-top: 15px;
+
+  border-top: 1px solid #153f57;
+}
+
+.view-details-button,
+.apply-button,
+.applied-button {
+  min-height: 38px;
+
+  padding: 0 15px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.view-details-button {
+  background: transparent;
+
+  border: 1px solid #28607e;
+
+  color: #82b4d3;
+}
+
+.view-details-button:hover {
+  background: #10364b;
+  border-color: #3b91bb;
+}
+
+.apply-button {
+  background: #2188e7;
+
+  border: 1px solid #3198f2;
+
+  color: white;
+}
+
+.apply-button:hover {
+  background: #2b98f3;
+  transform: translateY(-1px);
+}
+
+.apply-button.disabled {
+  background: #273a47;
+
+  border-color: #40515c;
+
+  color: #75838c;
+
+  cursor: not-allowed;
+}
+
+.applied-button {
+  background: rgba(44, 191, 124, 0.1);
+
+  border: 1px solid #327c60;
+
+  color: #68d4a3;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.drives-empty-state {
+  grid-column: 1 / -1;
+
+  padding: 50px 20px;
+
+  text-align: center;
+
+  background: #0a293d;
+
+  border: 1px solid #185474;
+  border-radius: 14px;
+}
+
+.empty-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 15px;
+
+  background: #123d57;
+
+  border-radius: 12px;
+
+  color: #54b8f7;
+
+  font-size: 23px;
+}
+
+.drives-empty-state h3 {
+  margin: 0;
+
+  font-size: 17px;
+}
+
+.drives-empty-state p {
+  margin: 7px 0 0;
+
+  color: #7996ab;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.drive-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(2, 10, 19, 0.78);
+
+  backdrop-filter: blur(4px);
+}
+
+.drive-modal {
+  position: relative;
+
+  width: min(620px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  padding: 28px;
+
+  background: #0a293d;
+
+  border: 1px solid #236383;
+  border-radius: 16px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.4);
+}
+
+.modal-close {
+  position: absolute;
+
+  top: 14px;
+  right: 14px;
+
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid #285a74;
+  border-radius: 8px;
+
+  background: #10364b;
+
+  color: #a8c2d3;
+
+  font-size: 21px;
+
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: white;
+  background: #15445c;
+}
+
+.modal-logo {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  background: #123f5b;
+
+  border: 1px solid #236486;
+  border-radius: 11px;
+
+  color: #67c5ff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.drive-modal h2 {
+  margin: 0;
+
+  font-size: 23px;
+}
+
+.modal-company {
+  margin: 5px 0 22px;
+
+  color: #7fa5bd;
+
+  font-size: 13px;
+}
+
+.modal-info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+}
+
+.modal-info-grid > div {
+  padding: 13px;
+
+  background: #082237;
+
+  border: 1px solid #184b66;
+  border-radius: 9px;
+}
+
+.modal-info-grid span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #7795aa;
+
+  font-size: 10px;
+}
+
+.modal-info-grid strong {
+  color: #e9f2f8;
+
+  font-size: 13px;
+}
+
+.modal-description,
+.modal-skills {
+  margin-top: 22px;
+}
+
+.modal-description h4,
+.modal-skills h4 {
+  margin: 0 0 8px;
+
+  font-size: 13px;
+}
+
+.modal-description p {
+  margin: 0;
+
+  color: #89a7bc;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 25px;
+  padding-top: 17px;
+
+  border-top: 1px solid #16445c;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .drives-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drive-controls {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .eligible-drives-page {
+    padding: 22px 16px 40px;
+  }
+
+  .drives-page-header h1 {
+    font-size: 27px;
+  }
+
+  .drive-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .drive-card-top {
+    flex-wrap: wrap;
+  }
+
+  .eligibility-badge {
+    margin-left: 61px;
+  }
+
+  .drive-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drive-actions {
+    flex-direction: column;
+  }
+
+  .view-details-button,
+  .apply-button,
+  .applied-button {
+    width: 100%;
+  }
+
+  .modal-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

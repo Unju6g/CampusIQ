@@ -1,0 +1,665 @@
+/* ================================
+   PLACEMENT READINESS PAGE
+   ================================ */
+
+.readiness-page {
+  min-height: 100vh;
+  background: #061525;
+  color: #ffffff;
+  padding: 28px 32px 50px;
+  box-sizing: border-box;
+}
+
+/* ================================
+   PAGE HEADER
+   ================================ */
+
+.readiness-header {
+  margin-bottom: 24px;
+}
+
+.readiness-header h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 750;
+  color: #ffffff;
+}
+
+.readiness-header p {
+  margin: 6px 0 0;
+  font-size: 16px;
+  color: #83a9c7;
+}
+
+/* ================================
+   MAIN READINESS CARD
+   ================================ */
+
+.main-readiness-card {
+  width: 100%;
+  min-height: 210px;
+  background: #0b2d43;
+  border: 1px solid #1a5b7c;
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 38px;
+
+  margin-bottom: 24px;
+}
+
+/* ================================
+   SCORE SECTION
+   ================================ */
+
+.readiness-score-section {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  min-width: 370px;
+}
+
+.score-label {
+  display: flex;
+  flex-direction: column;
+  color: #91aec5;
+  font-size: 27px;
+  line-height: 1.08;
+  font-weight: 650;
+}
+
+.score-value {
+  color: #24a8ff;
+  font-size: 52px;
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.trend-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.trend-up {
+  color: #4ade80;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.trend-down {
+  color: #f87171;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.trend-text {
+  color: #779ab5;
+  font-size: 12px;
+}
+
+/* ================================
+   MAIN PROGRESS AREA
+   ================================ */
+
+.main-progress-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.zone-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.zone-red {
+  color: #f87171;
+}
+
+.zone-yellow {
+  color: #fbbf24;
+}
+
+.zone-green {
+  color: #4ade80;
+}
+
+.zone-progress-bar {
+  position: relative;
+  height: 13px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  background: #17384d;
+}
+
+/* Three background zones */
+.red-zone {
+  width: 40%;
+  background: rgba(239, 68, 68, 0.30);
+}
+
+.yellow-zone {
+  width: 30%;
+  background: rgba(245, 158, 11, 0.30);
+}
+
+.green-zone {
+  width: 30%;
+  background: rgba(34, 197, 94, 0.30);
+}
+
+/* Actual score overlay */
+.score-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+.score-progress.danger {
+  background: #ef4444;
+}
+
+.score-progress.warning {
+  background: #f59e0b;
+}
+
+.score-progress.success {
+  background: #22c55e;
+}
+
+.score-description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  gap: 20px;
+}
+
+.score-description strong {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.score-description span {
+  font-size: 14px;
+  color: #8babca;
+  text-align: right;
+}
+
+/* ================================
+   SCORE BREAKDOWN
+   ================================ */
+
+.breakdown-section {
+  background: #0b2d43;
+  border: 1px solid #1a5b7c;
+  border-radius: 14px;
+  padding: 25px 28px;
+  margin-bottom: 24px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 23px;
+  color: #ffffff;
+}
+
+.section-heading p {
+  margin: 5px 0 0;
+  color: #83a9c7;
+  font-size: 14px;
+}
+
+.overall-small-score {
+  color: #789ab6;
+  font-size: 13px;
+}
+
+.overall-small-score strong {
+  color: #25a8ff;
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+/* ================================
+   BREAKDOWN GRID
+   ================================ */
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.breakdown-card {
+  background: #09253a;
+  border: 1px solid #19536f;
+  border-radius: 11px;
+  padding: 19px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.breakdown-card:hover {
+  transform: translateY(-2px);
+  border-color: #268bc0;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.18);
+}
+
+.breakdown-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.breakdown-top h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.breakdown-top p {
+  margin: 5px 0 0;
+  color: #7599b6;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.breakdown-score {
+  color: #27a9ff;
+  font-size: 23px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+/* ================================
+   MINI PROGRESS
+   ================================ */
+
+.mini-progress-track {
+  height: 7px;
+  background: #17394f;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 17px 0 14px;
+}
+
+.mini-progress {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+.mini-progress.danger {
+  background: #ef4444;
+}
+
+.mini-progress.warning {
+  background: #f59e0b;
+}
+
+.mini-progress.success {
+  background: #22c55e;
+}
+
+.breakdown-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-text.danger {
+  color: #f87171;
+}
+
+.status-text.warning {
+  color: #fbbf24;
+}
+
+.status-text.success {
+  color: #4ade80;
+}
+
+/* ================================
+   SMALL ACTION BUTTON
+   ================================ */
+
+.small-action-btn {
+  background: transparent;
+  border: none;
+  color: #46aff0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 3px 0;
+}
+
+.small-action-btn:hover {
+  color: #7bcaff;
+}
+
+.small-action-btn span {
+  margin-left: 4px;
+}
+
+/* ================================
+   IMPROVE SECTION
+   ================================ */
+
+.improve-section {
+  background: #0b2d43;
+  border: 1px solid #1a5b7c;
+  border-radius: 14px;
+  padding: 25px 28px;
+  margin-bottom: 24px;
+}
+
+.improve-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.improve-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #123f5b;
+  border: 1px solid #1b6488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #35adff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.improve-header h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.improve-header p {
+  margin: 4px 0 0;
+  color: #83a9c7;
+  font-size: 13px;
+}
+
+/* ================================
+   QUICK LINKS
+   ================================ */
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.quick-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  background: #09263b;
+  border: 1px solid #19536f;
+  border-radius: 10px;
+
+  padding: 15px;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.quick-link:hover {
+  transform: translateY(-2px);
+  border-color: #2b91c5;
+  background: #0b3048;
+}
+
+.quick-icon {
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+
+  border-radius: 9px;
+  background: #123f5b;
+  color: #37adff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 17px;
+}
+
+.quick-content {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.quick-content strong {
+  font-size: 14px;
+}
+
+.quick-content span {
+  color: #769bb7;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.quick-arrow {
+  color: #3faef0;
+  font-size: 19px;
+}
+
+/* ================================
+   SCORE GUIDE
+   ================================ */
+
+.score-guide {
+  background: #0b2d43;
+  border: 1px solid #1a5b7c;
+  border-radius: 14px;
+  padding: 22px 28px;
+}
+
+.guide-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.guide-icon {
+  width: 37px;
+  height: 37px;
+  border-radius: 9px;
+  background: #123f5b;
+  border: 1px solid #1b6488;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #45b2f5;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.guide-title h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.guide-title p {
+  margin: 4px 0 0;
+  color: #789bb6;
+  font-size: 12px;
+}
+
+.guide-zones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.guide-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #09253a;
+  border: 1px solid #174d69;
+  border-radius: 9px;
+  padding: 12px;
+}
+
+.guide-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.guide-dot.red {
+  background: #ef4444;
+}
+
+.guide-dot.yellow {
+  background: #f59e0b;
+}
+
+.guide-dot.green {
+  background: #22c55e;
+}
+
+.guide-zone div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.guide-zone strong {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.guide-zone small {
+  font-size: 11px;
+  color: #7699b5;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 1100px) {
+  .main-readiness-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .readiness-score-section {
+    min-width: 0;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .readiness-page {
+    padding: 20px 15px 35px;
+  }
+
+  .readiness-header h1 {
+    font-size: 28px;
+  }
+
+  .main-readiness-card {
+    padding: 20px;
+  }
+
+  .readiness-score-section {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .score-label {
+    font-size: 22px;
+  }
+
+  .score-value {
+    font-size: 42px;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .guide-zones {
+    grid-template-columns: 1fr;
+  }
+
+  .score-description {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .score-description span {
+    text-align: left;
+  }
+}

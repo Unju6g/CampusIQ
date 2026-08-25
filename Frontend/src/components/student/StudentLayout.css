@@ -1,0 +1,297 @@
+/* =========================================================
+   CAMPUSIQ - STUDENT SHARED LAYOUT
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  background: #061b2b;
+  color: #ffffff;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.student-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #061b2b;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.student-sidebar {
+  position: fixed;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 218px;
+  min-width: 218px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px 16px 18px;
+
+  background: #071f31;
+
+  border-right: 1px solid #16415e;
+
+  z-index: 100;
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 8px 10px 27px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  background: #2196f3;
+
+  border-radius: 10px;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.brand-text h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.brand-text span {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #79a3c4;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   MENU TITLE
+   ========================================================= */
+
+.menu-title {
+  margin: 0 12px 9px;
+
+  color: #5083a8;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+
+  flex: 1;
+
+  overflow-y: auto;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: #16415e;
+  border-radius: 10px;
+}
+
+/* =========================================================
+   MENU LINK
+   ========================================================= */
+
+.sidebar-link {
+  width: 100%;
+  min-height: 38px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 9px 12px;
+
+  border-radius: 8px;
+
+  color: #a7c0d6;
+
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background: #0d3048;
+  color: #ffffff;
+}
+
+.sidebar-link.active {
+  background: #1976e8;
+  color: #ffffff;
+
+  box-shadow:
+    0 5px 15px rgba(25, 118, 232, 0.25);
+}
+
+.menu-icon {
+  width: 20px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: center;
+
+  font-size: 14px;
+}
+
+.menu-label {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.logout-button {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 10px;
+
+  background: transparent;
+
+  border: 1px solid #24516d;
+
+  border-radius: 8px;
+
+  color: #8fb0c8;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #351d24;
+
+  border-color: #e06472;
+
+  color: #ff8f9a;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.student-main {
+  min-height: 100vh;
+
+  margin-left: 218px;
+
+  width: calc(100% - 218px);
+
+  background: #061b2b;
+
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .student-sidebar {
+    position: relative;
+
+    width: 100%;
+    min-width: 100%;
+
+    min-height: auto;
+
+    padding: 15px;
+
+    border-right: none;
+
+    border-bottom: 1px solid #16415e;
+  }
+
+  .student-main {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  .sidebar-menu {
+    max-height: 260px;
+  }
+}

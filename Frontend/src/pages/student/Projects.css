@@ -1,0 +1,1184 @@
+/* =========================================================
+   CAMPUSIQ - PROJECTS PAGE
+   SOFTWARE + HARDWARE + IOT + EMBEDDED
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.projects-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px 36px 60px;
+
+  background: #061b2b;
+  color: #ffffff;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.projects-header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 28px;
+}
+
+.projects-label,
+.section-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #1ca8f5;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+}
+
+.projects-header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 30px;
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
+}
+
+.projects-header p {
+  margin: 7px 0 0;
+
+  color: #7b9db8;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   ADD PROJECT BUTTON
+   ========================================================= */
+
+.add-project-btn {
+  min-width: 145px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #1976e8;
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 16px rgba(25, 118, 232, 0.22);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.add-project-btn span {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.add-project-btn:hover {
+  background: #2186f5;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 20px rgba(25, 118, 232, 0.3);
+}
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.project-form-card {
+  width: 100%;
+
+  margin-bottom: 28px;
+
+  padding: 25px;
+
+  background: #0a293e;
+
+  border: 1px solid #174866;
+
+  border-radius: 12px;
+}
+
+/* =========================================================
+   FORM HEADER
+   ========================================================= */
+
+.form-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-bottom: 20px;
+
+  margin-bottom: 22px;
+
+  border-bottom: 1px solid #17445f;
+}
+
+.form-card-header h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.form-card-header p {
+  margin: 5px 0 0;
+
+  color: #7298b4;
+
+  font-size: 11px;
+}
+
+.close-form-btn {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #082239;
+
+  border: 1px solid #28536d;
+
+  border-radius: 8px;
+
+  color: #a9c5d8;
+
+  font-size: 23px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.close-form-btn:hover {
+  background: #321e27;
+
+  border-color: #d95d6d;
+
+  color: #ff8996;
+}
+
+/* =========================================================
+   FORM SECTION TITLE
+   ========================================================= */
+
+.form-section-title {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.form-section-title > span {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #103c5a;
+
+  border: 1px solid #1d5271;
+
+  border-radius: 9px;
+
+  font-size: 18px;
+}
+
+.form-section-title h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.form-section-title p {
+  margin: 3px 0 0;
+
+  color: #7197b2;
+
+  font-size: 10px;
+}
+
+.second-section {
+  margin-top: 28px;
+}
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.project-form-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px 22px;
+}
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  margin-bottom: 7px;
+
+  color: #aac3d4;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.form-group label b {
+  color: #27a8f5;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  background: #082239;
+
+  border: 1px solid #20516d;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+  height: 44px;
+
+  padding: 0 13px;
+}
+
+.form-group textarea {
+  min-height: 105px;
+
+  padding: 12px 13px;
+
+  resize: vertical;
+
+  line-height: 1.55;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #5c7f98;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group select option {
+  background: #082239;
+  color: #ffffff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2196f3;
+
+  background: #0a2c43;
+
+  box-shadow:
+    0 0 0 2px rgba(33, 150, 243, 0.12);
+}
+
+/* =========================================================
+   HELPER TEXT
+   ========================================================= */
+
+.form-group small {
+  margin-top: 6px;
+
+  color: #7298b2;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+/* =========================================================
+   HARDWARE SECTION
+   ========================================================= */
+
+.hardware-section {
+  margin-top: 26px;
+
+  padding: 20px;
+
+  background: #082239;
+
+  border: 1px solid #174866;
+
+  border-radius: 10px;
+}
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #17445f;
+}
+
+.cancel-btn,
+.save-project-btn {
+  min-width: 125px;
+
+  padding: 11px 18px;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background: transparent;
+
+  border: 1px solid #31566d;
+
+  color: #9eb8ca;
+}
+
+.cancel-btn:hover {
+  background: #0d3048;
+
+  color: #ffffff;
+
+  border-color: #4c7590;
+}
+
+.save-project-btn {
+  border: none;
+
+  background: #1976e8;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 5px 15px rgba(25, 118, 232, 0.2);
+}
+
+.save-project-btn:hover {
+  background: #2186f5;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(25, 118, 232, 0.3);
+}
+
+/* =========================================================
+   PROJECTS SECTION
+   ========================================================= */
+
+.projects-section {
+  width: 100%;
+
+  margin-top: 10px;
+}
+
+.projects-section-header {
+  margin-bottom: 18px;
+}
+
+.projects-section-header h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.projects-section-header p {
+  margin: 5px 0 0;
+
+  color: #7398b3;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   PROJECT GRID
+   ========================================================= */
+
+.projects-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+/* =========================================================
+   PROJECT CARD
+   ========================================================= */
+
+.project-card {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+
+  background: #0a293e;
+
+  border: 1px solid #174866;
+
+  border-radius: 11px;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #2178ae;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+/* =========================================================
+   PROJECT CARD HEADER
+   ========================================================= */
+
+.project-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 14px;
+}
+
+.project-title-area {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.project-number {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #103c5a;
+
+  border: 1px solid #1b5575;
+
+  border-radius: 8px;
+
+  color: #5fc3ff;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.project-title-area h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.project-type {
+  display: inline-block;
+
+  margin-top: 4px;
+
+  color: #70b9dc;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.status-badge {
+  flex-shrink: 0;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.status-badge.completed {
+  background: rgba(22, 214, 154, 0.1);
+
+  border: 1px solid rgba(22, 214, 154, 0.35);
+
+  color: #3de0ad;
+}
+
+.status-badge.in-progress {
+  background: rgba(33, 150, 243, 0.1);
+
+  border: 1px solid rgba(33, 150, 243, 0.35);
+
+  color: #52b8ff;
+}
+
+.status-badge.planned {
+  background: rgba(156, 163, 175, 0.1);
+
+  border: 1px solid rgba(156, 163, 175, 0.35);
+
+  color: #aeb8c4;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.project-description {
+  margin: 0 0 14px;
+
+  color: #8eafc5;
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   DURATION
+   ========================================================= */
+
+.project-duration {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 16px;
+
+  color: #8db0c6;
+
+  font-size: 10px;
+}
+
+.project-duration span {
+  font-size: 12px;
+}
+
+/* =========================================================
+   INFO BLOCK
+   ========================================================= */
+
+.project-info-block {
+  margin-bottom: 15px;
+}
+
+.info-title {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #6d9bb8;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.7px;
+}
+
+/* =========================================================
+   TECHNOLOGY TAGS
+   ========================================================= */
+
+.project-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.technology-tag {
+  padding: 6px 9px;
+
+  background: #0c3550;
+
+  border: 1px solid #1c6289;
+
+  border-radius: 6px;
+
+  color: #72c7f4;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   HARDWARE TAGS
+   ========================================================= */
+
+.hardware-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.hardware-tag {
+  padding: 6px 9px;
+
+  background: #123b3b;
+
+  border: 1px solid #286c69;
+
+  border-radius: 6px;
+
+  color: #73d1c7;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   SPECIFICATIONS
+   ========================================================= */
+
+.specifications-box {
+  margin-bottom: 15px;
+
+  padding: 11px;
+
+  background: #082239;
+
+  border: 1px solid #17435e;
+
+  border-radius: 7px;
+}
+
+.specifications-box p {
+  margin: 0;
+
+  color: #9bb7c9;
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   TOOLS
+   ========================================================= */
+
+.tools-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.tools-list span {
+  padding: 5px 8px;
+
+  background: transparent;
+
+  border: 1px solid #31566d;
+
+  border-radius: 5px;
+
+  color: #9ab7ca;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   PROJECT LINKS
+   ========================================================= */
+
+.project-links {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 2px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 11px;
+
+  border-radius: 6px;
+
+  text-decoration: none;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  transition: all 0.2s ease;
+}
+
+.github-link {
+  background: #102f46;
+
+  border: 1px solid #315b75;
+
+  color: #c1d6e4;
+}
+
+.github-link:hover {
+  background: #153d58;
+
+  color: #ffffff;
+}
+
+.demo-link {
+  background: rgba(33, 150, 243, 0.1);
+
+  border: 1px solid #2377aa;
+
+  color: #58bfff;
+}
+
+.demo-link:hover {
+  background: #0d3855;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   CARD ACTIONS
+   ========================================================= */
+
+.project-card-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: auto;
+
+  padding-top: 17px;
+
+  border-top: 1px solid #153d56;
+}
+
+.edit-project-btn,
+.delete-project-btn {
+  padding: 7px 11px;
+
+  border-radius: 6px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.edit-project-btn {
+  background: transparent;
+
+  border: 1px solid #28678c;
+
+  color: #63bff1;
+}
+
+.edit-project-btn:hover {
+  background: #0d3855;
+
+  border-color: #3a8ab7;
+
+  color: #ffffff;
+}
+
+.delete-project-btn {
+  background: transparent;
+
+  border: 1px solid #74404b;
+
+  color: #e98291;
+}
+
+.delete-project-btn:hover {
+  background: #351d24;
+
+  border-color: #c65a6b;
+
+  color: #ff9ca8;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-projects {
+  width: 100%;
+
+  padding: 55px 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #0a293e;
+
+  border: 1px dashed #24536d;
+
+  border-radius: 11px;
+}
+
+.empty-icon {
+  width: 55px;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 13px;
+
+  background: #103c5a;
+
+  border-radius: 12px;
+
+  font-size: 25px;
+}
+
+.empty-projects h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+}
+
+.empty-projects p {
+  max-width: 500px;
+
+  margin: 7px 0 17px;
+
+  color: #779ab5;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.empty-add-btn {
+  padding: 9px 15px;
+
+  background: #1976e8;
+
+  border: none;
+
+  border-radius: 7px;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   INFORMATION CARD
+   ========================================================= */
+
+.project-info-card {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 13px;
+
+  margin-top: 20px;
+
+  padding: 17px;
+
+  background: #082239;
+
+  border: 1px solid #17435e;
+
+  border-radius: 9px;
+}
+
+.info-card-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #103c5a;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+}
+
+.project-info-card h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 12px;
+}
+
+.project-info-card p {
+  margin: 5px 0 0;
+
+  color: #789bb4;
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .projects-page {
+    padding: 26px 22px 50px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+  .projects-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .add-project-btn {
+    width: 100%;
+  }
+
+  .project-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: auto;
+  }
+
+  .project-form-card {
+    padding: 20px;
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .projects-page {
+    padding: 20px 15px 40px;
+  }
+
+  .projects-header h1 {
+    font-size: 24px;
+  }
+
+  .projects-header p {
+    font-size: 12px;
+  }
+
+  .project-form-card {
+    padding: 17px;
+  }
+
+  .form-card-header h2 {
+    font-size: 17px;
+  }
+
+  .project-card {
+    padding: 17px;
+  }
+
+  .project-card-header {
+    flex-direction: column;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancel-btn,
+  .save-project-btn {
+    width: 100%;
+  }
+
+  .project-info-card {
+    padding: 14px;
+  }
+
+}
