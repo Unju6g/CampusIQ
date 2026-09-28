@@ -1,652 +1,599 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Academics.css";
 
-const semesterList = [
-  "1st Semester",
-  "2nd Semester",
-  "3rd Semester",
-  "4th Semester",
-  "5th Semester",
-  "6th Semester",
-  "7th Semester",
-  "8th Semester",
-];
-
-const createSemesterData = () =>
-  semesterList.map((semester, index) => ({
-    semester,
-    sgpa: "",
-    cgpa: "",
-    percentage: "",
-    backlogs: "",
-  }));
+const API_URL = "http://localhost:5000/api/student/academics";
 
 function Academics() {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const [academicData, setAcademicData] = useState({
     tenthPercentage: "",
-    tenthYear: "",
+    tenthPassingYear: "",
     twelfthPercentage: "",
-    twelfthYear: "",
-
-    diplomaCompleted: "No",
-    diplomaPercentage: "",
-    diplomaYear: "",
-
-    degree: "B.Tech",
-    branch: "Electronics & Computer Engineering",
-    college: "Walchand Institute of Technology",
-    admissionYear: "2023",
-    currentSemester: "7th Semester",
-
-    semesters: createSemesterData(),
+    twelfthPassingYear: "",
   });
+
+  // =====================================================
+  // GET AUTH TOKEN
+  // =====================================================
+
+  const getToken = () => {
+    return (
+      localStorage.getItem("campusiqToken") ||
+      localStorage.getItem("token")
+    );
+  };
+
+  // =====================================================
+  // LOAD ACADEMIC DATA
+  // =====================================================
+
+  useEffect(() => {
+    const loadAcademicData = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const token = getToken();
+
+        if (!token) {
+          navigate("/login", { replace: true });
+          return;
+        }
+
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 401) {
+          localStorage.removeItem("campusiqToken");
+          localStorage.removeItem("campusiqUser");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+
+          navigate("/login", { replace: true });
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Failed to load academic information."
+          );
+        }
+
+        // Supports either:
+        // data.academics
+        // OR
+        // data.user.academics
+
+        const academics =
+          data.academics ||
+          data.user?.academics ||
+          {};
+
+        setAcademicData({
+          tenthPercentage:
+            academics.tenthPercentage ??
+            academics.tenth?.percentage ??
+            "",
+          tenthPassingYear:
+            academics.tenthPassingYear ??
+            academics.tenth?.passingYear ??
+            "",
+          twelfthPercentage:
+            academics.twelfthPercentage ??
+            academics.twelfth?.percentage ??
+            "",
+          twelfthPassingYear:
+            academics.twelfthPassingYear ??
+            academics.twelfth?.passingYear ??
+            "",
+        });
+      } catch (err) {
+        console.error("Academics loading error:", err);
+
+        setError(
+          err.message ||
+            "Unable to load academic information."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAcademicData();
+  }, [navigate]);
+
+  // =====================================================
+  // HANDLE INPUT
+  // =====================================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
+    setAcademicData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    setError("");
+    setSuccess("");
   };
 
-  const handleSemesterChange = (index, field, value) => {
-    const updatedSemesters = [...formData.semesters];
+  // =====================================================
+  // VALIDATION
+  // =====================================================
 
-    updatedSemesters[index] = {
-      ...updatedSemesters[index],
-      [field]: value,
-    };
+  const validateForm = () => {
+    const {
+      tenthPercentage,
+      tenthPassingYear,
+      twelfthPercentage,
+      twelfthPassingYear,
+    } = academicData;
 
-    setFormData((prev) => ({
-      ...prev,
-      semesters: updatedSemesters,
-    }));
+    if (
+      tenthPercentage !== "" &&
+      (Number(tenthPercentage) < 0 ||
+        Number(tenthPercentage) > 100)
+    ) {
+      setError("10th percentage must be between 0 and 100.");
+      return false;
+    }
+
+    if (
+      twelfthPercentage !== "" &&
+      (Number(twelfthPercentage) < 0 ||
+        Number(twelfthPercentage) > 100)
+    ) {
+      setError("12th percentage must be between 0 and 100.");
+      return false;
+    }
+
+    if (
+      tenthPassingYear !== "" &&
+      !/^\d{4}$/.test(tenthPassingYear)
+    ) {
+      setError("Please enter a valid 10th passing year.");
+      return false;
+    }
+
+    if (
+      twelfthPassingYear !== "" &&
+      !/^\d{4}$/.test(twelfthPassingYear)
+    ) {
+      setError("Please enter a valid 12th passing year.");
+      return false;
+    }
+
+    return true;
   };
 
-  const handleSubmit = (e) => {
+  // =====================================================
+  // SAVE ACADEMIC DATA
+  // =====================================================
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Academic Details:", formData);
+    setError("");
+    setSuccess("");
 
-    alert("Academic details saved successfully!");
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const token = getToken();
+
+      if (!token) {
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      const response = await fetch(API_URL, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tenthPercentage:
+            academicData.tenthPercentage === ""
+              ? null
+              : Number(academicData.tenthPercentage),
+
+          tenthPassingYear:
+            academicData.tenthPassingYear,
+
+          twelfthPercentage:
+            academicData.twelfthPercentage === ""
+              ? null
+              : Number(academicData.twelfthPercentage),
+
+          twelfthPassingYear:
+            academicData.twelfthPassingYear,
+        }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem("campusiqToken");
+        localStorage.removeItem("campusiqUser");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to save academic information."
+        );
+      }
+
+      setSuccess(
+        "Academic information saved successfully."
+      );
+    } catch (err) {
+      console.error("Academics save error:", err);
+
+      setError(
+        err.message ||
+          "Unable to save academic information."
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleReset = () => {
-    setFormData({
-      tenthPercentage: "",
-      tenthYear: "",
-      twelfthPercentage: "",
-      twelfthYear: "",
+  // =====================================================
+  // LOADING
+  // =====================================================
 
-      diplomaCompleted: "No",
-      diplomaPercentage: "",
-      diplomaYear: "",
+  if (loading) {
+    return (
+      <div className="academics-page">
+        <div className="academics-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading academic information...</p>
+        </div>
+      </div>
+    );
+  }
 
-      degree: "B.Tech",
-      branch: "Electronics & Computer Engineering",
-      college: "Walchand Institute of Technology",
-      admissionYear: "2023",
-      currentSemester: "7th Semester",
-
-      semesters: createSemesterData(),
-    });
-  };
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
     <div className="academics-page">
 
-      {/* =====================================================
-          PAGE HEADER
-      ===================================================== */}
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
       <div className="academics-header">
+
         <div>
-          <span className="academics-label">
+          <p className="page-label">
             STUDENT ACADEMIC PROFILE
-          </span>
+          </p>
 
-          <h1>Current Academics</h1>
+          <h1>
+            Current Academics
+          </h1>
 
-          <p>
-            Add and manage your school, diploma and current degree
-            academic information.
+          <p className="page-description">
+            Add and manage your school, diploma and
+            current degree academic information.
           </p>
         </div>
+
+        <button
+          type="button"
+          className="back-button"
+          onClick={() =>
+            navigate("/student/dashboard")
+          }
+        >
+          ← Dashboard
+        </button>
+
       </div>
 
-      <form onSubmit={handleSubmit}>
+      {/* =================================================
+          ERROR
+      ================================================= */}
 
-        {/* =====================================================
+      {error && (
+        <div className="academic-message error-message">
+          <span>!</span>
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* =================================================
+          SUCCESS
+      ================================================= */}
+
+      {success && (
+        <div className="academic-message success-message">
+          <span>✓</span>
+          <span>{success}</span>
+        </div>
+      )}
+
+      {/* =================================================
+          FORM
+      ================================================= */}
+
+      <form
+        className="academics-form"
+        onSubmit={handleSubmit}
+      >
+
+        {/* =================================================
             SCHOOL EDUCATION
-        ===================================================== */}
+        ================================================= */}
 
-        <section className="academic-section">
+        <section className="academic-card">
 
-          <div className="section-heading">
-            <div className="section-icon">🏫</div>
+          <div className="section-header">
+
+            <div className="section-icon">
+              🏫
+            </div>
 
             <div>
-              <h2>School Education</h2>
+              <h2>
+                School Education
+              </h2>
+
               <p>
-                Enter your 10th and 12th academic information.
+                Enter your 10th and 12th academic
+                information.
               </p>
             </div>
+
           </div>
 
-          <div className="education-grid">
+          <div className="education-block">
 
-            {/* 10th */}
-            <div className="education-row">
+            <div className="education-title">
+              <h3>10th Standard</h3>
+              <span>Secondary School</span>
+            </div>
 
-              <div className="education-title">
-                <strong>10th Standard</strong>
-                <span>Secondary School</span>
-              </div>
+            <div className="form-grid">
+
+              {/* 10TH PERCENTAGE */}
 
               <div className="form-group">
-                <label>10th Percentage</label>
 
-                <div className="input-with-helper">
+                <label htmlFor="tenthPercentage">
+                  10th Percentage
+                </label>
+
+                <div className="input-with-suffix">
+
                   <input
-                    type="number"
+                    id="tenthPercentage"
                     name="tenthPercentage"
-                    value={formData.tenthPercentage}
-                    onChange={handleChange}
+                    type="number"
                     min="0"
                     max="100"
                     step="0.01"
+                    value={
+                      academicData.tenthPercentage
+                    }
+                    onChange={handleChange}
                     placeholder="e.g. 85.50"
                   />
 
                   <span>%</span>
+
                 </div>
 
-                <small>Enter value between 0 and 100</small>
+                <small>
+                  Enter value between 0 and 100
+                </small>
+
               </div>
 
+              {/* 10TH PASSING YEAR */}
+
               <div className="form-group">
-                <label>10th Passing Year</label>
+
+                <label htmlFor="tenthPassingYear">
+                  10th Passing Year
+                </label>
 
                 <input
+                  id="tenthPassingYear"
+                  name="tenthPassingYear"
                   type="number"
-                  name="tenthYear"
-                  value={formData.tenthYear}
-                  onChange={handleChange}
-                  min="2000"
+                  min="1990"
                   max="2100"
+                  value={
+                    academicData.tenthPassingYear
+                  }
+                  onChange={handleChange}
                   placeholder="e.g. 2021"
                 />
 
-                <small>Year of passing</small>
+                <small>
+                  Year of passing
+                </small>
+
               </div>
 
             </div>
 
-            {/* 12th */}
-            <div className="education-row">
+          </div>
 
-              <div className="education-title">
-                <strong>12th Standard</strong>
-                <span>Higher Secondary</span>
-              </div>
+          {/* =================================================
+              12TH
+          ================================================= */}
+
+          <div className="education-block">
+
+            <div className="education-title">
+              <h3>12th Standard</h3>
+              <span>Higher Secondary</span>
+            </div>
+
+            <div className="form-grid">
+
+              {/* 12TH PERCENTAGE */}
 
               <div className="form-group">
-                <label>12th Percentage</label>
 
-                <div className="input-with-helper">
+                <label htmlFor="twelfthPercentage">
+                  12th Percentage
+                </label>
+
+                <div className="input-with-suffix">
+
                   <input
-                    type="number"
+                    id="twelfthPercentage"
                     name="twelfthPercentage"
-                    value={formData.twelfthPercentage}
-                    onChange={handleChange}
+                    type="number"
                     min="0"
                     max="100"
                     step="0.01"
+                    value={
+                      academicData.twelfthPercentage
+                    }
+                    onChange={handleChange}
                     placeholder="e.g. 82.50"
                   />
 
                   <span>%</span>
+
                 </div>
 
-                <small>Enter value between 0 and 100</small>
+                <small>
+                  Enter value between 0 and 100
+                </small>
+
               </div>
 
+              {/* 12TH PASSING YEAR */}
+
               <div className="form-group">
-                <label>12th Passing Year</label>
+
+                <label htmlFor="twelfthPassingYear">
+                  12th Passing Year
+                </label>
 
                 <input
+                  id="twelfthPassingYear"
+                  name="twelfthPassingYear"
                   type="number"
-                  name="twelfthYear"
-                  value={formData.twelfthYear}
-                  onChange={handleChange}
-                  min="2000"
+                  min="1990"
                   max="2100"
+                  value={
+                    academicData.twelfthPassingYear
+                  }
+                  onChange={handleChange}
                   placeholder="e.g. 2023"
                 />
 
-                <small>Year of passing</small>
+                <small>
+                  Year of passing
+                </small>
+
               </div>
 
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* =====================================================
-            DIPLOMA
-        ===================================================== */}
-
-        <section className="academic-section">
-
-          <div className="section-heading">
-            <div className="section-icon">🎓</div>
-
-            <div>
-              <h2>Diploma Information</h2>
-              <p>
-                Diploma information is optional.
-              </p>
-            </div>
-          </div>
-
-          <div className="form-grid">
-
-            <div className="form-group">
-              <label>Did you complete a Diploma?</label>
-
-              <select
-                name="diplomaCompleted"
-                value={formData.diplomaCompleted}
-                onChange={handleChange}
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-
-              <small>
-                Select Yes only if you completed a diploma.
-              </small>
-            </div>
-
-          </div>
-
-          {formData.diplomaCompleted === "Yes" && (
-            <div className="diploma-fields">
-
-              <div className="form-group">
-                <label>Diploma Percentage</label>
-
-                <div className="input-with-helper">
-                  <input
-                    type="number"
-                    name="diplomaPercentage"
-                    value={formData.diplomaPercentage}
-                    onChange={handleChange}
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    placeholder="e.g. 78.50"
-                  />
-
-                  <span>%</span>
-                </div>
-
-                <small>Enter value between 0 and 100</small>
-              </div>
-
-              <div className="form-group">
-                <label>Diploma Passing Year</label>
-
-                <input
-                  type="number"
-                  name="diplomaYear"
-                  value={formData.diplomaYear}
-                  onChange={handleChange}
-                  min="2000"
-                  max="2100"
-                  placeholder="e.g. 2023"
-                />
-
-                <small>Year of passing</small>
-              </div>
-
-            </div>
-          )}
-
-        </section>
-
-
-        {/* =====================================================
-            CURRENT DEGREE
-        ===================================================== */}
-
-        <section className="academic-section">
-
-          <div className="section-heading">
-            <div className="section-icon">📚</div>
-
-            <div>
-              <h2>Current Degree</h2>
-              <p>
-                Enter your present degree and college information.
-              </p>
-            </div>
-          </div>
-
-          <div className="form-grid">
-
-            <div className="form-group">
-              <label>Degree</label>
-
-              <select
-                name="degree"
-                value={formData.degree}
-                onChange={handleChange}
-              >
-                <option value="B.Tech">B.Tech</option>
-                <option value="B.E">B.E</option>
-                <option value="M.Tech">M.Tech</option>
-                <option value="M.E">M.E</option>
-                <option value="B.Sc">B.Sc</option>
-                <option value="BCA">BCA</option>
-                <option value="MCA">MCA</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Current Semester</label>
-
-              <select
-                name="currentSemester"
-                value={formData.currentSemester}
-                onChange={handleChange}
-              >
-                {semesterList.map((semester) => (
-                  <option key={semester} value={semester}>
-                    {semester}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Branch / Specialization</label>
-
-              <input
-                type="text"
-                name="branch"
-                value={formData.branch}
-                onChange={handleChange}
-                placeholder="Enter your branch"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Admission Year</label>
-
-              <input
-                type="number"
-                name="admissionYear"
-                value={formData.admissionYear}
-                onChange={handleChange}
-                min="2000"
-                max="2100"
-                placeholder="e.g. 2023"
-              />
-            </div>
-
-            <div className="form-group full-width">
-              <label>College / Institute</label>
-
-              <input
-                type="text"
-                name="college"
-                value={formData.college}
-                onChange={handleChange}
-                placeholder="Enter your college name"
-              />
             </div>
 
           </div>
 
         </section>
 
+        {/* =================================================
+            DEGREE INFORMATION
+        ================================================= */}
 
-        {/* =====================================================
-            SEMESTER PERFORMANCE
-        ===================================================== */}
+        <section className="academic-card">
 
-        <section className="academic-section semester-section">
+          <div className="section-header">
 
-          <div className="section-heading">
-            <div className="section-icon">📊</div>
-
-            <div>
-              <h2>Semester-wise Academic Performance</h2>
-
-              <p>
-                Enter SGPA, CGPA, percentage and backlogs for
-                each semester.
-              </p>
-            </div>
-          </div>
-
-
-          {/* INPUT GUIDELINE */}
-
-          <div className="academic-guideline">
-
-            <div className="guideline-icon">
-              i
+            <div className="section-icon">
+              🎓
             </div>
 
             <div>
-              <strong>Input Guidelines</strong>
+              <h2>
+                Current Degree
+              </h2>
 
               <p>
-                SGPA and CGPA should be between 0 and 10.
-                Percentage should be between 0 and 100.
-                Enter 0 for backlogs if there are none.
+                Your current college academic
+                information is already available in
+                your profile.
               </p>
             </div>
 
           </div>
 
+          <div className="degree-info">
 
-          {/* SEMESTER TABLE */}
-
-          <div className="semester-table-wrapper">
-
-            <div className="semester-table">
-
-              {/* HEADER */}
-
-              <div className="semester-table-header">
-
-                <div>Semester</div>
-
-                <div>
-                  SGPA
-                  <span>/ 10</span>
-                </div>
-
-                <div>
-                  CGPA
-                  <span>/ 10</span>
-                </div>
-
-                <div>
-                  Percentage
-                  <span>/ 100</span>
-                </div>
-
-                <div>
-                  Backlogs
-                </div>
-
-              </div>
-
-
-              {/* ROWS */}
-
-              {formData.semesters.map((semester, index) => (
-
-                <div
-                  className="semester-table-row"
-                  key={semester.semester}
-                >
-
-                  {/* SEMESTER */}
-
-                  <div className="semester-name">
-
-                    <span className="semester-number">
-                      {index + 1}
-                    </span>
-
-                    <strong>
-                      {semester.semester}
-                    </strong>
-
-                  </div>
-
-
-                  {/* SGPA */}
-
-                  <div className="semester-input">
-
-                    <input
-                      type="number"
-                      value={semester.sgpa}
-                      onChange={(e) =>
-                        handleSemesterChange(
-                          index,
-                          "sgpa",
-                          e.target.value
-                        )
-                      }
-                      min="0"
-                      max="10"
-                      step="0.01"
-                      placeholder="0.00"
-                    />
-
-                  </div>
-
-
-                  {/* CGPA */}
-
-                  <div className="semester-input">
-
-                    <input
-                      type="number"
-                      value={semester.cgpa}
-                      onChange={(e) =>
-                        handleSemesterChange(
-                          index,
-                          "cgpa",
-                          e.target.value
-                        )
-                      }
-                      min="0"
-                      max="10"
-                      step="0.01"
-                      placeholder="0.00"
-                    />
-
-                  </div>
-
-
-                  {/* PERCENTAGE */}
-
-                  <div className="semester-input">
-
-                    <input
-                      type="number"
-                      value={semester.percentage}
-                      onChange={(e) =>
-                        handleSemesterChange(
-                          index,
-                          "percentage",
-                          e.target.value
-                        )
-                      }
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      placeholder="0.00"
-                    />
-
-                  </div>
-
-
-                  {/* BACKLOG */}
-
-                  <div className="semester-input backlog-input">
-
-                    <input
-                      type="number"
-                      value={semester.backlogs}
-                      onChange={(e) =>
-                        handleSemesterChange(
-                          index,
-                          "backlogs",
-                          e.target.value
-                        )
-                      }
-                      min="0"
-                      step="1"
-                      placeholder="0"
-                    />
-
-                  </div>
-
-                </div>
-
-              ))}
-
+            <div className="degree-item">
+              <span>Current Degree</span>
+              <strong>B.Tech</strong>
             </div>
 
-          </div>
+            <div className="degree-item">
+              <span>Course</span>
+              <strong>
+                Electronics & Computer Engineering
+              </strong>
+            </div>
 
+            <div className="degree-item">
+              <span>Academic Information</span>
+              <strong>
+                Managed through your student profile
+              </strong>
+            </div>
 
-          {/* NOTE */}
-
-          <div className="semester-note">
-            <span>ⓘ</span>
-
-            <p>
-              SGPA and CGPA are calculated out of 10.
-              Percentage is calculated out of 100.
-              Backlogs should be entered as the number of
-              active backlogs for that semester.
-            </p>
           </div>
 
         </section>
 
+        {/* =================================================
+            SAVE
+        ================================================= */}
 
-        {/* =====================================================
-            ACTION BUTTONS
-        ===================================================== */}
-
-        <div className="save-area">
-
-          <button
-            type="button"
-            className="reset-academic-btn"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
+        <div className="save-section">
 
           <button
             type="submit"
-            className="save-academic-btn"
+            className="save-button"
+            disabled={saving}
           >
-            Save Academic Details
+            {saving
+              ? "Saving..."
+              : "Save Academic Information"}
           </button>
 
         </div>

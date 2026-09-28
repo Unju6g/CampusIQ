@@ -1,20 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // =====================================================
-// MAIN PAGES
+// MAIN
 // =====================================================
 
 import Landing from "./pages/Landing";
 
 // =====================================================
-// AUTHENTICATION
+// AUTH
 // =====================================================
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
 // =====================================================
-// STUDENT PAGES
+// STUDENT
 // =====================================================
 
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -30,10 +30,17 @@ import EligibleDrives from "./pages/student/EligibleDrives";
 import NoticeBoard from "./pages/student/NoticeBoard";
 
 // =====================================================
-// TPO
+// TPO / ADMIN
 // =====================================================
 
 import TPODashboard from "./pages/tpo/TPODashboard";
+import Students from "./pages/tpo/Students";
+import Companies from "./pages/tpo/Companies";
+import PlacementDrives from "./pages/tpo/PlacementDrives";
+import Eligibility from "./pages/tpo/Eligibility";
+import Applications from "./pages/tpo/Applications";
+import Announcements from "./pages/tpo/Announcements";
+import Analytics from "./pages/tpo/Analytics";
 
 // =====================================================
 // PROTECTED ROUTE
@@ -42,7 +49,10 @@ import TPODashboard from "./pages/tpo/TPODashboard";
 function ProtectedRoute({ children, role }) {
   const storedUser = localStorage.getItem("campusiqUser");
 
-  // User is not logged in
+  // ---------------------------------------------------
+  // No login
+  // ---------------------------------------------------
+
   if (!storedUser) {
     return <Navigate to="/login" replace />;
   }
@@ -56,13 +66,17 @@ function ProtectedRoute({ children, role }) {
     return <Navigate to="/login" replace />;
   }
 
-  // User has wrong role
-  if (user.role !== role) {
-    if (user.role === "student") {
+  // ---------------------------------------------------
+  // Check role
+  // ---------------------------------------------------
+
+  if (!user || user.role !== role) {
+
+    if (user?.role === "student") {
       return <Navigate to="/student/dashboard" replace />;
     }
 
-    if (user.role === "tpo") {
+    if (user?.role === "tpo") {
       return <Navigate to="/admin/dashboard" replace />;
     }
 
@@ -79,16 +93,21 @@ function ProtectedRoute({ children, role }) {
 function App() {
   return (
     <BrowserRouter>
+
       <Routes>
 
-        {/* ================= HOME ================= */}
+        {/* =================================================
+            HOME
+        ================================================= */}
 
         <Route
           path="/"
           element={<Landing />}
         />
 
-        {/* ================= AUTH ================= */}
+        {/* =================================================
+            AUTHENTICATION
+        ================================================= */}
 
         <Route
           path="/login"
@@ -100,7 +119,9 @@ function App() {
           element={<Register />}
         />
 
-        {/* ================= STUDENT ================= */}
+        {/* =================================================
+            STUDENT DASHBOARD
+        ================================================= */}
 
         <Route
           path="/student/dashboard"
@@ -111,6 +132,10 @@ function App() {
           }
         />
 
+        {/* =================================================
+            STUDENT PROFILE
+        ================================================= */}
+
         <Route
           path="/student/profile"
           element={
@@ -119,6 +144,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            STUDENT ACADEMICS
+        ================================================= */}
 
         <Route
           path="/student/academics"
@@ -129,6 +158,10 @@ function App() {
           }
         />
 
+        {/* =================================================
+            STUDENT CERTIFICATIONS
+        ================================================= */}
+
         <Route
           path="/student/certifications"
           element={
@@ -137,6 +170,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            STUDENT PROJECTS
+        ================================================= */}
 
         <Route
           path="/student/projects"
@@ -147,6 +184,10 @@ function App() {
           }
         />
 
+        {/* =================================================
+            STUDENT SKILLS
+        ================================================= */}
+
         <Route
           path="/student/skills"
           element={
@@ -155,6 +196,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            STUDENT RESUME
+        ================================================= */}
 
         <Route
           path="/student/resume"
@@ -165,6 +210,10 @@ function App() {
           }
         />
 
+        {/* =================================================
+            STUDENT PLACEMENT READINESS
+        ================================================= */}
+
         <Route
           path="/student/readiness"
           element={
@@ -173,6 +222,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            STUDENT ROADMAP
+        ================================================= */}
 
         <Route
           path="/student/roadmap"
@@ -183,6 +236,10 @@ function App() {
           }
         />
 
+        {/* =================================================
+            STUDENT ELIGIBLE DRIVES
+        ================================================= */}
+
         <Route
           path="/student/drives"
           element={
@@ -191,6 +248,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            STUDENT NOTICE BOARD
+        ================================================= */}
 
         <Route
           path="/student/notices"
@@ -201,7 +262,9 @@ function App() {
           }
         />
 
-        {/* ================= TPO ================= */}
+        {/* =================================================
+            TPO / ADMIN DASHBOARD
+        ================================================= */}
 
         <Route
           path="/admin/dashboard"
@@ -212,14 +275,151 @@ function App() {
           }
         />
 
-        {/* ================= INVALID URL ================= */}
+        {/* =================================================
+            TPO / ADMIN - STUDENTS
+        ================================================= */}
+
+        <Route
+          path="/admin/students"
+          element={
+            <ProtectedRoute role="tpo">
+              <Students />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - COMPANIES
+        ================================================= */}
+
+        <Route
+          path="/admin/companies"
+          element={
+            <ProtectedRoute role="tpo">
+              <Companies />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - PLACEMENT DRIVES
+        ================================================= */}
+
+        <Route
+          path="/admin/placement-drives"
+          element={
+            <ProtectedRoute role="tpo">
+              <PlacementDrives />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - ELIGIBILITY
+        ================================================= */}
+
+        <Route
+          path="/admin/eligibility"
+          element={
+            <ProtectedRoute role="tpo">
+              <Eligibility />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - APPLICATIONS
+        ================================================= */}
+
+        <Route
+          path="/admin/applications"
+          element={
+            <ProtectedRoute role="tpo">
+              <Applications />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - ANNOUNCEMENTS
+        ================================================= */}
+
+        <Route
+          path="/admin/announcements"
+          element={
+            <ProtectedRoute role="tpo">
+              <Announcements />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            TPO / ADMIN - ANALYTICS
+        ================================================= */}
+
+        <Route
+          path="/admin/analytics"
+          element={
+            <ProtectedRoute role="tpo">
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            BACKWARD-COMPATIBLE TPO ROUTES
+            These prevent old buttons from breaking.
+        ================================================= */}
+
+        {/* Old Placement Drives URL */}
+        <Route
+          path="/admin/drives"
+          element={
+            <Navigate
+              to="/admin/placement-drives"
+              replace
+            />
+          }
+        />
+
+        {/* Old Companies URL */}
+        <Route
+          path="/admin/company"
+          element={
+            <Navigate
+              to="/admin/companies"
+              replace
+            />
+          }
+        />
+
+        {/* Old Student URL */}
+        <Route
+          path="/admin/student"
+          element={
+            <Navigate
+              to="/admin/students"
+              replace
+            />
+          }
+        />
+
+        {/* =================================================
+            INVALID URL
+        ================================================= */}
 
         <Route
           path="*"
-          element={<Navigate to="/" replace />}
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
         />
 
       </Routes>
+
     </BrowserRouter>
   );
 }

@@ -1,0 +1,794 @@
+/* =====================================================
+   ELIGIBILITY PAGE
+===================================================== */
+
+.eligibility-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #061526;
+  color: #f5f8ff;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.eligibility-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+
+.page-label {
+  display: block;
+  color: #20a9f5;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 7px;
+}
+
+.eligibility-header h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.eligibility-header p {
+  margin: 8px 0 0;
+  color: #82a8c9;
+  font-size: 14px;
+}
+
+/* =====================================================
+   SUMMARY STATS
+===================================================== */
+
+.eligibility-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.eligibility-stat-card {
+  position: relative;
+  overflow: hidden;
+
+  background: #0c2d43;
+  border: 1px solid #195475;
+  border-radius: 14px;
+
+  padding: 20px 22px;
+
+  min-height: 125px;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.eligibility-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #267aa4;
+}
+
+.eligible-stat {
+  border-left: 3px solid #39d49a;
+}
+
+.not-eligible-stat {
+  border-left: 3px solid #ef6b7d;
+}
+
+.rate-stat {
+  border-left: 3px solid #20a9f5;
+}
+
+.stat-label {
+  color: #8baec8;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stat-number {
+  margin-top: 7px;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.eligible-stat .stat-number {
+  color: #45dba6;
+}
+
+.not-eligible-stat .stat-number {
+  color: #f07887;
+}
+
+.rate-stat .stat-number {
+  color: #32b5ff;
+}
+
+.stat-caption {
+  margin-top: 9px;
+  color: #668ca8;
+  font-size: 11px;
+}
+
+/* =====================================================
+   MINI PROGRESS
+===================================================== */
+
+.mini-progress {
+  width: 100%;
+  height: 6px;
+
+  margin-top: 13px;
+
+  background: #071e31;
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.mini-progress-fill {
+  height: 100%;
+
+  background: #20a9f5;
+  border-radius: 20px;
+
+  transition: width 0.3s ease;
+}
+
+/* =====================================================
+   PANEL
+===================================================== */
+
+.eligibility-panel {
+  background: #0a263b;
+  border: 1px solid #195475;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+/* =====================================================
+   PANEL HEADER
+===================================================== */
+
+.eligibility-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #183e57;
+}
+
+.eligibility-panel-header h2 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 800;
+  color: #f5f8ff;
+}
+
+.eligibility-panel-header p {
+  margin: 7px 0 0;
+
+  color: #789bb6;
+  font-size: 13px;
+}
+
+/* =====================================================
+   COMPANY SELECTOR
+===================================================== */
+
+.company-selector {
+  min-width: 260px;
+}
+
+.company-selector label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #8caec7;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: "⌄";
+
+  position: absolute;
+  right: 13px;
+  top: 50%;
+
+  transform: translateY(-55%);
+
+  color: #69a4c6;
+  font-size: 15px;
+
+  pointer-events: none;
+}
+
+.select-wrapper select,
+.filter-wrapper select {
+  width: 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: #071d30;
+
+  border: 1px solid #24516c;
+  border-radius: 9px;
+
+  color: #edf7ff;
+
+  padding: 11px 38px 11px 13px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.select-wrapper select:hover,
+.filter-wrapper select:hover {
+  border-color: #3182ae;
+}
+
+.select-wrapper select:focus,
+.filter-wrapper select:focus {
+  border-color: #20a9f5;
+  box-shadow: 0 0 0 2px rgba(32, 169, 245, 0.1);
+}
+
+.select-wrapper option,
+.filter-wrapper option {
+  background: #0a263b;
+  color: #ffffff;
+}
+
+/* =====================================================
+   REQUIREMENTS
+===================================================== */
+
+.requirements-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 18px;
+
+  margin-top: 20px;
+  padding: 15px 17px;
+
+  background: #081e31;
+  border: 1px solid #163d56;
+  border-radius: 10px;
+}
+
+.requirement-item span {
+  display: block;
+
+  color: #6f94ae;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.requirement-item strong {
+  color: #eaf5fc;
+  font-size: 14px;
+}
+
+.requirement-divider {
+  width: 1px;
+  height: 32px;
+  background: #24465d;
+}
+
+.required-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.required-skill-tag {
+  padding: 5px 9px;
+
+  border: 1px solid #245473;
+  border-radius: 20px;
+
+  color: #8dc9e9;
+  background: #0c2b40;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.eligibility-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin: 22px 0 15px;
+}
+
+.search-wrapper {
+  position: relative;
+
+  width: 340px;
+}
+
+.search-wrapper input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  background: #071d30;
+  border: 1px solid #24516c;
+  border-radius: 9px;
+
+  color: #edf7ff;
+
+  padding: 11px 13px 11px 38px;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.search-wrapper input::placeholder {
+  color: #557b95;
+}
+
+.search-wrapper input:focus {
+  border-color: #20a9f5;
+}
+
+.search-icon {
+  position: absolute;
+
+  left: 13px;
+  top: 50%;
+
+  transform: translateY(-52%);
+
+  color: #6e9ab4;
+
+  font-size: 17px;
+
+  pointer-events: none;
+}
+
+.filter-wrapper {
+  width: 190px;
+}
+
+.filter-wrapper label {
+  display: block;
+
+  color: #789bb6;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  margin-bottom: 6px;
+}
+
+.filter-wrapper {
+  position: relative;
+}
+
+.filter-wrapper::after {
+  content: "⌄";
+
+  position: absolute;
+
+  right: 13px;
+  bottom: 11px;
+
+  color: #69a4c6;
+
+  pointer-events: none;
+}
+
+.filter-wrapper select {
+  padding-right: 35px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.eligibility-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  border: 1px solid #173e56;
+  border-radius: 11px;
+
+  background: #081f32;
+}
+
+.eligibility-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  min-width: 760px;
+}
+
+.eligibility-table thead {
+  background: #092438;
+}
+
+.eligibility-table th {
+  padding: 13px 17px;
+
+  border-bottom: 1px solid #1c435b;
+
+  color: #7299b4;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  text-align: left;
+}
+
+.eligibility-table td {
+  padding: 15px 17px;
+
+  border-bottom: 1px solid #14374d;
+
+  color: #dcecf5;
+
+  font-size: 13px;
+}
+
+.eligibility-table tbody tr {
+  background: #0a263b;
+
+  transition:
+    background 0.18s ease;
+}
+
+.eligibility-table tbody tr:nth-child(even) {
+  background: #092438;
+}
+
+.eligibility-table tbody tr:hover {
+  background: #10334a;
+}
+
+.eligibility-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =====================================================
+   STUDENT CELL
+===================================================== */
+
+.student-cell {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.student-avatar {
+  width: 36px;
+  height: 36px;
+
+  min-width: 36px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.avatar-blue {
+  background: #164d6b;
+  color: #5ec7ff;
+}
+
+.avatar-purple {
+  background: #493c69;
+  color: #c5a9ff;
+}
+
+.avatar-green {
+  background: #285447;
+  color: #70ddb1;
+}
+
+.avatar-orange {
+  background: #62472f;
+  color: #ffc27b;
+}
+
+.avatar-pink {
+  background: #633c51;
+  color: #ff9fca;
+}
+
+.student-info strong {
+  display: block;
+
+  color: #eef7fc;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.student-info span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #668da8;
+
+  font-size: 10px;
+}
+
+/* =====================================================
+   CGPA
+===================================================== */
+
+.cgpa-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.cgpa-cell strong {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.cgpa-cell span {
+  color: #6389a2;
+  font-size: 10px;
+}
+
+.cgpa-good {
+  color: #46dca7;
+}
+
+.cgpa-warning {
+  color: #ffc46d;
+}
+
+.cgpa-danger {
+  color: #f27887;
+}
+
+/* =====================================================
+   SKILL MATCH
+===================================================== */
+
+.skills-match {
+  width: 145px;
+}
+
+.skills-count {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.skills-count strong {
+  color: #eaf6fc;
+  font-size: 13px;
+}
+
+.skills-count span {
+  color: #6b91aa;
+  font-size: 10px;
+}
+
+.skill-progress {
+  width: 100%;
+  height: 5px;
+
+  margin-top: 7px;
+
+  background: #061a2b;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.skill-progress-fill {
+  height: 100%;
+
+  background: #3ed6a1;
+
+  border-radius: 20px;
+
+  transition: width 0.3s ease;
+}
+
+/* =====================================================
+   STATUS BADGES
+===================================================== */
+
+.eligibility-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.eligibility-badge span {
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.eligible-badge {
+  color: #49dda9;
+  background: #103d36;
+  border: 1px solid #1d5e4d;
+}
+
+.not-eligible-badge {
+  color: #ff8995;
+  background: #462a32;
+  border: 1px solid #693b46;
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-table {
+  padding: 50px 20px !important;
+
+  text-align: center;
+}
+
+.empty-table .empty-icon {
+  width: 42px;
+  height: 42px;
+
+  margin: 0 auto 10px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background: #102f44;
+
+  color: #58baf0;
+
+  font-size: 20px;
+}
+
+.empty-table strong {
+  display: block;
+
+  color: #e9f5fc;
+
+  font-size: 14px;
+}
+
+.empty-table span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #6b90a9;
+
+  font-size: 11px;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.eligibility-footer {
+  padding-top: 14px;
+
+  color: #648ba5;
+
+  font-size: 11px;
+}
+
+.eligibility-footer strong {
+  color: #a9c9dc;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .eligibility-page {
+    padding: 22px;
+  }
+
+  .eligibility-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .eligibility-panel-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .company-selector {
+    width: 100%;
+    min-width: 0;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .eligibility-page {
+    padding: 16px;
+  }
+
+  .eligibility-header h1 {
+    font-size: 27px;
+  }
+
+  .eligibility-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-wrapper,
+  .filter-wrapper {
+    width: 100%;
+  }
+
+  .requirements-box {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .requirement-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+}

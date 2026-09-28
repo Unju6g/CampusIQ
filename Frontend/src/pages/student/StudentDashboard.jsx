@@ -1,911 +1,975 @@
-import React, { useMemo, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./student-dashboard.css";
 
-function StudentDashboard() {
-  const navigate = useNavigate();
+/* =====================================================
+   SVG ICONS
+===================================================== */
 
-  const [notificationOpen, setNotificationOpen] = useState(false);
-
-  // =========================================================
-  // GET LOGGED-IN STUDENT
-  // =========================================================
-  const storedUser = localStorage.getItem("campusiqUser");
-
-  let user = {};
-
-  try {
-    user = storedUser ? JSON.parse(storedUser) : {};
-  } catch (error) {
-    user = {};
-  }
-
-  // Try profile data also if your Profile page stores it separately
-  let profileData = {};
-
-  try {
-    const storedProfile = localStorage.getItem("campusiqProfile");
-    profileData = storedProfile ? JSON.parse(storedProfile) : {};
-  } catch (error) {
-    profileData = {};
-  }
-
-  // =========================================================
-  // STUDENT NAME
-  // =========================================================
-  const studentName =
-    user.name ||
-    user.fullName ||
-    profileData.name ||
-    profileData.fullName ||
-    "Gunjan Shaha";
-
-  // =========================================================
-  // PROFILE COMPLETION / MISSING ITEMS
-  // =========================================================
-  const hasProfilePhoto =
-    Boolean(user.profilePhoto) ||
-    Boolean(user.photoURL) ||
-    Boolean(user.avatar) ||
-    Boolean(profileData.profilePhoto) ||
-    Boolean(profileData.photoURL);
-
-  const projectCount = Array.isArray(user.projects)
-    ? user.projects.length
-    : Array.isArray(profileData.projects)
-      ? profileData.projects.length
-      : Number(user.projectCount || profileData.projectCount || 0);
-
-  const hasResume =
-    Boolean(user.resumeUploaded) ||
-    Boolean(user.resumeUrl) ||
-    Boolean(user.resumeFileName) ||
-    Boolean(profileData.resumeUploaded) ||
-    Boolean(profileData.resumeUrl) ||
-    Boolean(profileData.resumeFileName);
-
-  const missingItems = useMemo(() => {
-    const items = [];
-
-    if (!hasProfilePhoto) {
-      items.push({
-        icon: "○",
-        text: "Add a profile photo",
-        path: "/student/profile",
-      });
-    }
-
-    if (projectCount < 1) {
-      items.push({
-        icon: "◇",
-        text: "Add at least 1 project",
-        path: "/student/projects",
-      });
-    }
-
-    if (!hasResume) {
-      items.push({
-        icon: "□",
-        text: "Upload your resume",
-        path: "/student/resume",
-      });
-    }
-
-    return items.slice(0, 3);
-  }, [hasProfilePhoto, projectCount, hasResume]);
-
-  // =========================================================
-  // SIDEBAR
-  // =========================================================
-  const menuItems = [
-    {
-      name: "Dashboard",
-      path: "/student/dashboard",
-      icon: "⌂",
-    },
-    {
-      name: "Profile",
-      path: "/student/profile",
-      icon: "◉",
-    },
-    {
-      name: "Academics",
-      path: "/student/academics",
-      icon: "▣",
-    },
-    {
-      name: "Skills",
-      path: "/student/skills",
-      icon: "◇",
-    },
-    {
-      name: "Projects",
-      path: "/student/projects",
-      icon: "◆",
-    },
-    {
-      name: "Certifications",
-      path: "/student/certifications",
-      icon: "✦",
-    },
-    {
-      name: "Resume",
-      path: "/student/resume",
-      icon: "▤",
-    },
-    {
-      name: "Readiness",
-      path: "/student/readiness",
-      icon: "◌",
-    },
-    {
-      name: "Readiness Roadmap",
-      path: "/student/roadmap",
-      icon: "↗",
-    },
-    {
-      name: "Eligible Drives",
-      path: "/student/drives",
-      icon: "▥",
-    },
-    {
-      name: "Notice Board",
-      path: "/student/notices",
-      icon: "●",
-    },
-  ];
-
-  // =========================================================
-  // LOGOUT
-  // =========================================================
-  const handleLogout = () => {
-    localStorage.removeItem("campusiqUser");
-    navigate("/login");
+const Icon = ({ name, size = 20 }) => {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
   };
 
-  // =========================================================
-  // NOTIFICATIONS
-  // =========================================================
-  const notices = [
-    {
-      id: 1,
-      title: "New Placement Drive Available",
-      description: "A new Software Developer placement drive is available.",
-      time: "Today",
-      unread: true,
-      icon: "●",
-    },
-    {
-      id: 2,
-      title: "Resume Submission Reminder",
-      description: "Keep your latest resume updated in CampusIQ.",
-      time: "This week",
-      unread: true,
-      icon: "◆",
-    },
-    {
-      id: 3,
-      title: "Profile Update",
-      description: "Complete your profile to improve recommendations.",
-      time: "2 days ago",
-      unread: false,
-      icon: "✓",
-    },
-  ];
+  const icons = {
+    dashboard: (
+      <svg {...common}>
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    ),
 
-  const unreadNotices = notices.filter((notice) => notice.unread);
+    profile: (
+      <svg {...common}>
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7" />
+      </svg>
+    ),
 
-  // =========================================================
-  // STAT CARD NAVIGATION
-  // =========================================================
-  const statCards = [
-    {
-      title: "Placement Readiness",
-      value: "78%",
-      description: "Good progress",
-      icon: "◌",
-      path: "/student/readiness",
-    },
-    {
-      title: "Resume Score",
-      value: "82%",
-      description: "Above average",
-      icon: "▤",
-      path: "/student/resume",
-    },
-    {
-      title: "Eligible Companies",
-      value: "12",
-      description: "Based on your profile",
-      icon: "▥",
-      path: "/student/drives",
-    },
-    {
-      title: "Active Drives",
-      value: "5",
-      description: "Currently open",
-      icon: "◆",
-      path: "/student/drives",
-    },
-  ];
+    academics: (
+      <svg {...common}>
+        <path d="M3 10l9-5 9 5-9 5-9-5z" />
+        <path d="M7 12v5c3 2 7 2 10 0v-5" />
+        <path d="M21 10v6" />
+      </svg>
+    ),
 
-  // =========================================================
-  // RECENT ACTIVITY
-  // =========================================================
-  const recentActivities = [
+    skills: (
+      <svg {...common}>
+        <path d="M9 12l2 2 4-4" />
+        <path d="M20 7h-5l-2-2H9L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+      </svg>
+    ),
+
+    projects: (
+      <svg {...common}>
+        <path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7z" />
+        <path d="M8 13h8" />
+        <path d="M12 9v8" />
+      </svg>
+    ),
+
+    certificate: (
+      <svg {...common}>
+        <circle cx="12" cy="8" r="5" />
+        <path d="M9 12l-1 9 4-2 4 2-1-9" />
+        <path d="M10 8l1 1 2-2" />
+      </svg>
+    ),
+
+    resume: (
+      <svg {...common}>
+        <path d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+        <path d="M14 2v6h6" />
+        <path d="M8 13h8" />
+        <path d="M8 17h6" />
+        <path d="M8 9h2" />
+      </svg>
+    ),
+
+    readiness: (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </svg>
+    ),
+
+    roadmap: (
+      <svg {...common}>
+        <path d="M4 19V5" />
+        <path d="M4 5c4-3 7 3 10 0s6 0 6 0v10c-3 0-6-3-9 0s-7-3-7 0" />
+      </svg>
+    ),
+
+    drives: (
+      <svg {...common}>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M7 8h10" />
+        <path d="M7 12h10" />
+        <path d="M7 16h6" />
+      </svg>
+    ),
+
+    bell: (
+      <svg {...common}>
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
+      </svg>
+    ),
+
+    arrow: (
+      <svg {...common}>
+        <path d="M5 12h14" />
+        <path d="M13 6l6 6-6 6" />
+      </svg>
+    ),
+
+    logout: (
+      <svg {...common}>
+        <path d="M10 17l5-5-5-5" />
+        <path d="M15 12H3" />
+        <path d="M21 19V5a2 2 0 0 0-2-2h-5" />
+      </svg>
+    ),
+
+    edit: (
+      <svg {...common}>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+
+    warning: (
+      <svg {...common}>
+        <path d="M12 3L2.5 20h19L12 3z" />
+        <path d="M12 9v5" />
+        <path d="M12 17h.01" />
+      </svg>
+    ),
+
+    close: (
+      <svg {...common}>
+        <path d="M6 6l12 12" />
+        <path d="M18 6L6 18" />
+      </svg>
+    ),
+  };
+
+  return icons[name] || null;
+};
+
+/* =====================================================
+   STAT CARD
+===================================================== */
+
+const StatCard = ({
+  icon,
+  label,
+  value,
+  type = "default",
+  description,
+}) => {
+  return (
+    <div className={`stat-card stat-${type}`}>
+      <div className="stat-icon">
+        <Icon name={icon} size={21} />
+      </div>
+
+      <div className="stat-content">
+        <span className="stat-label">{label}</span>
+        <strong className="stat-value">{value}</strong>
+
+        {description && (
+          <span className="stat-description">{description}</span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/* =====================================================
+   INFO CARD
+===================================================== */
+
+const InfoItem = ({ label, value, warning = false }) => {
+  return (
+    <div className={`info-item ${warning ? "info-warning" : ""}`}>
+      <span className="info-label">{label}</span>
+
+      {warning ? (
+        <button className="add-now-button">
+          {value}
+          <Icon name="arrow" size={14} />
+        </button>
+      ) : (
+        <strong className="info-value">{value}</strong>
+      )}
+    </div>
+  );
+};
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+const SidebarNav = ({ studentName, navigate, onLogout }) => {
+  const menuItems = [
     {
-      icon: "✦",
-      title: "Added a new certification",
-      time: "2 days ago",
-      path: "/student/certifications",
+      label: "Dashboard",
+      path: "/student/dashboard",
+      icon: "dashboard",
     },
     {
-      icon: "◇",
-      title: "Updated your skills",
-      time: "3 days ago",
+      label: "Profile",
+      path: "/student/profile",
+      icon: "profile",
+    },
+    {
+      label: "Academics",
+      path: "/student/academics",
+      icon: "academics",
+    },
+    {
+      label: "Skills",
       path: "/student/skills",
+      icon: "skills",
     },
     {
-      icon: "◆",
-      title: "Added a new project",
-      time: "5 days ago",
+      label: "Projects",
       path: "/student/projects",
+      icon: "projects",
     },
     {
-      icon: "▥",
-      title: "Checked eligible placement drives",
-      time: "1 week ago",
-      path: "/student/drives",
+      label: "Certifications",
+      path: "/student/certifications",
+      icon: "certificate",
+    },
+    {
+      label: "Resume",
+      path: "/student/resume",
+      icon: "resume",
+    },
+    {
+      label: "Readiness",
+      path: "/student/readiness",
+      icon: "readiness",
+    },
+    {
+      label: "Readiness Roadmap",
+      path: "/student/readiness-roadmap",
+      icon: "roadmap",
+    },
+    {
+      label: "Eligible Drives",
+      path: "/student/eligible-drives",
+      icon: "drives",
     },
   ];
 
   return (
-    <div className="student-dashboard">
-
-      {/* =====================================================
-          SIDEBAR
-      ===================================================== */}
-      <aside className="student-sidebar">
-
-        <div className="sidebar-brand">
-          <div className="brand-icon">C</div>
-
-          <div className="brand-text">
-            <h2>CampusIQ</h2>
-            <span>Student Portal</span>
-          </div>
+    <aside className="sidebar">
+      {/* STUDENT IDENTITY */}
+      <div className="sidebar-brand">
+        <div className="student-avatar-large">
+          {(studentName || "S").charAt(0).toUpperCase()}
         </div>
 
-        <div className="menu-title">
-          MAIN MENU
+        <div className="student-brand-info">
+          <h2>{studentName || "Student"}</h2>
+          <p>Student Portal</p>
         </div>
+      </div>
 
-        <nav className="sidebar-menu">
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? "active" : ""}`
-              }
-            >
-              <span className="menu-icon">
-                {item.icon}
-              </span>
+      {/* MAIN MENU */}
+      <div className="sidebar-menu-title">MAIN MENU</div>
 
-              <span className="menu-label">
-                {item.name}
-              </span>
-            </NavLink>
-          ))}
-        </nav>
-
-        <button
-          className="logout-button"
-          onClick={handleLogout}
-        >
-          <span>↪</span>
-          Logout
-        </button>
-
-      </aside>
-
-      {/* =====================================================
-          MAIN CONTENT
-      ===================================================== */}
-      <main className="dashboard-main">
-
-        {/* =====================================================
-            HEADER
-        ===================================================== */}
-        <header className="dashboard-header">
-
-          <div className="header-left">
-
-            <span className="portal-label">
-              STUDENT PORTAL
+      <nav className="sidebar-nav">
+        {menuItems.map((item) => (
+          <button
+            key={item.label}
+            className={`sidebar-link ${
+              item.label === "Dashboard" ? "active" : ""
+            }`}
+            onClick={() => navigate(item.path)}
+          >
+            <span className="sidebar-icon">
+              <Icon name={item.icon} size={19} />
             </span>
 
-            <h1>
-              Welcome, {studentName}
-              <span className="welcome-hand">👋</span>
-            </h1>
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
 
-            <p>
-              Here's your current placement overview.
-            </p>
+      {/* SIDEBAR FOOTER */}
+      <div className="sidebar-bottom">
+        <div className="help-card">
+          <div className="help-icon">?</div>
 
+          <div>
+            <strong>Need help?</strong>
+            <span>We're here for you.</span>
+          </div>
+        </div>
+
+        <button className="sidebar-logout" onClick={onLogout}>
+          <Icon name="logout" size={18} />
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+  );
+};
+
+/* =====================================================
+   QUICK ACTION CARD
+===================================================== */
+
+const QuickAction = ({ icon, title, description, onClick }) => {
+  return (
+    <button className="quick-action-card" onClick={onClick}>
+      <div className="quick-action-icon">
+        <Icon name={icon} size={21} />
+      </div>
+
+      <div className="quick-action-content">
+        <strong>{title}</strong>
+        <span>{description}</span>
+      </div>
+
+      <div className="quick-action-arrow">
+        <Icon name="arrow" size={17} />
+      </div>
+    </button>
+  );
+};
+
+/* =====================================================
+   STUDENT DASHBOARD
+===================================================== */
+
+function StudentDashboard() {
+  const navigate = useNavigate();
+
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [mobileMenu, setMobileMenu] = useState(false);
+
+  /* ===================================================
+     FETCH STUDENT
+  =================================================== */
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const token =
+          localStorage.getItem("campusiqToken") ||
+          localStorage.getItem("token");
+
+        if (!token) {
+          setError(
+            "Your login session has expired. Please login again."
+          );
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(
+          "http://localhost:5000/api/student/me",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem("campusiqToken");
+            localStorage.removeItem("campusiqUser");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            setError(
+              "Your login session has expired. Please login again."
+            );
+          } else {
+            setError(
+              data.message || "Unable to load student data."
+            );
+          }
+
+          setLoading(false);
+          return;
+        }
+
+        setStudent(data.user);
+        setLoading(false);
+      } catch (err) {
+        console.error("Dashboard error:", err);
+
+        setError(
+          "Unable to connect to CampusIQ server."
+        );
+
+        setLoading(false);
+      }
+    };
+
+    fetchStudent();
+  }, []);
+
+  /* ===================================================
+     LOGOUT
+  =================================================== */
+
+  const handleLogout = () => {
+    localStorage.removeItem("campusiqToken");
+    localStorage.removeItem("campusiqUser");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login");
+  };
+
+  /* ===================================================
+     LOADING
+  =================================================== */
+
+  if (loading) {
+    return (
+      <div className="dashboard-loading-page">
+        <div className="loading-spinner"></div>
+        <p>Loading your dashboard...</p>
+      </div>
+    );
+  }
+
+  /* ===================================================
+     ERROR
+  =================================================== */
+
+  if (error) {
+    return (
+      <div className="dashboard-error-page">
+        <div className="error-box">
+          <div className="error-icon">
+            <Icon name="warning" size={28} />
           </div>
 
-          <div className="header-right">
+          <h2>Unable to load dashboard</h2>
+          <p>{error}</p>
 
-            {/* NOTIFICATION */}
-            <div className="notification-wrapper">
+          <button
+            onClick={() => navigate("/login")}
+            className="primary-button"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-              <button
-                className={`notification-button ${
-                  notificationOpen ? "notification-active" : ""
-                }`}
-                onClick={() =>
-                  setNotificationOpen(!notificationOpen)
-                }
-                title="Notifications"
-                aria-label="Open notifications"
-              >
-                <span>●</span>
+  /* ===================================================
+     DATA
+  =================================================== */
 
-                {unreadNotices.length > 0 && (
-                  <span className="notification-dot"></span>
-                )}
-              </button>
+  const studentName = student?.name || "Student";
 
-              {notificationOpen && (
-                <div className="notification-dropdown">
+  const firstName = studentName
+    .split(" ")[0]
+    .trim();
 
-                  <div className="notification-header">
-                    <div>
-                      <strong>Notifications</strong>
-                      <span>
-                        {unreadNotices.length} unread
-                      </span>
-                    </div>
+  const cgpa =
+    student?.cgpa !== undefined &&
+    student?.cgpa !== null
+      ? student.cgpa
+      : "Not added";
 
-                    <button
-                      onClick={() =>
-                        setNotificationOpen(false)
-                      }
-                      className="notification-close"
-                    >
-                      ×
-                    </button>
-                  </div>
+  const semester =
+    student?.semester || "Not added";
 
-                  <div className="notification-list">
+  const backlogs =
+    student?.backlogs !== undefined &&
+    student?.backlogs !== null
+      ? student.backlogs
+      : 0;
 
-                    {unreadNotices.length === 0 ? (
-                      <div className="no-notifications">
-                        <span>✓</span>
-                        <p>No new notifications</p>
-                      </div>
-                    ) : (
-                      unreadNotices
-                        .slice(0, 3)
-                        .map((notice) => (
-                          <button
-                            key={notice.id}
-                            className="notification-item"
-                            onClick={() => {
-                              setNotificationOpen(false);
-                              navigate("/student/notices");
-                            }}
-                          >
-                            <span className="notification-item-icon">
-                              {notice.icon}
-                            </span>
+  const passingYear =
+    student?.passingYear || "Not added";
 
-                            <span className="notification-item-content">
-                              <strong>
-                                {notice.title}
-                              </strong>
+  const department =
+    student?.department || "";
 
-                              <small>
-                                {notice.description}
-                              </small>
+  /* ===================================================
+     PROFILE COMPLETION
+  =================================================== */
 
-                              <em>
-                                {notice.time}
-                              </em>
-                            </span>
+  const profileFields = [
+    student?.name,
+    student?.prn,
+    student?.email,
+    student?.phone,
+    student?.branch,
+    student?.department,
+    student?.cgpa,
+    student?.semester,
+    student?.passingYear,
+  ];
 
-                            <span className="unread-dot"></span>
-                          </button>
-                        ))
-                    )}
+  const completedFields = profileFields.filter(
+    (field) =>
+      field !== undefined &&
+      field !== null &&
+      field !== ""
+  ).length;
 
-                  </div>
+  const profileCompletion = Math.round(
+    (completedFields / profileFields.length) * 100
+  );
 
-                  <button
-                    className="view-all-notifications"
-                    onClick={() => {
-                      setNotificationOpen(false);
-                      navigate("/student/notices");
-                    }}
-                  >
-                    View All Notifications →
-                  </button>
+  /* ===================================================
+     QUICK ACTIONS
+  =================================================== */
 
-                </div>
-              )}
+  const quickActions = [
+    {
+      icon: "profile",
+      title: "Update Profile",
+      description: "Manage your personal information",
+      path: "/student/profile",
+    },
+    {
+      icon: "academics",
+      title: "Academics",
+      description: "Manage your academic details",
+      path: "/student/academics",
+    },
+    {
+      icon: "skills",
+      title: "Skills",
+      description: "Add and manage technical skills",
+      path: "/student/skills",
+    },
+    {
+      icon: "projects",
+      title: "Projects",
+      description: "Showcase your projects and experience",
+      path: "/student/projects",
+    },
+    {
+      icon: "resume",
+      title: "Resume",
+      description: "Manage your placement resume",
+      path: "/student/resume",
+    },
+    {
+      icon: "readiness",
+      title: "Readiness",
+      description: "Check your placement readiness",
+      path: "/student/readiness",
+    },
+  ];
 
+  /* ===================================================
+     RETURN
+  =================================================== */
+
+  return (
+    <div className="campusiq-layout">
+
+      {/* MOBILE OVERLAY */}
+      {mobileMenu && (
+        <div
+          className="mobile-overlay"
+          onClick={() => setMobileMenu(false)}
+        ></div>
+      )}
+
+      {/* SIDEBAR */}
+      <div
+        className={`sidebar-wrapper ${
+          mobileMenu ? "mobile-open" : ""
+        }`}
+      >
+        <SidebarNav
+          studentName={studentName}
+          navigate={(path) => {
+            setMobileMenu(false);
+            navigate(path);
+          }}
+          onLogout={handleLogout}
+        />
+      </div>
+
+      {/* MAIN AREA */}
+      <main className="dashboard-main">
+
+        {/* TOP HEADER */}
+        <header className="top-header">
+
+          <div className="mobile-header-left">
+            <button
+              className="mobile-menu-button"
+              onClick={() =>
+                setMobileMenu(!mobileMenu)
+              }
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            <div className="mobile-logo">
+              CampusIQ
             </div>
+          </div>
 
-            {/* PROFILE MINI */}
-            <div className="profile-mini">
+          <div className="top-brand">
+            CampusIQ
+          </div>
 
-              <div className="profile-avatar">
-                {studentName.charAt(0).toUpperCase()}
+          <div className="top-header-right">
+
+            <button className="notification-button">
+              <Icon name="bell" size={19} />
+              <span className="notification-dot"></span>
+            </button>
+
+            <div className="header-profile">
+              <div className="header-avatar">
+                {studentName
+                  .charAt(0)
+                  .toUpperCase()}
               </div>
 
-              <div>
+              <div className="header-profile-text">
                 <strong>{studentName}</strong>
                 <span>Student</span>
               </div>
-
             </div>
 
           </div>
-
         </header>
 
-        {/* =====================================================
-            STAT CARDS
-        ===================================================== */}
-        <section className="stats-grid">
+        {/* CONTENT */}
+        <div className="dashboard-content">
 
-          {statCards.map((card) => (
-            <button
-              key={card.title}
-              className="stat-card"
-              onClick={() => navigate(card.path)}
-            >
+          {/* PAGE INTRO */}
+          <section className="welcome-section">
 
-              <div className="stat-icon">
-                {card.icon}
-              </div>
+            <div className="welcome-text">
 
-              <div className="stat-content">
-
-                <span>{card.title}</span>
-
-                <strong>{card.value}</strong>
-
-                <small>{card.description}</small>
-
-              </div>
-
-              <span className="stat-arrow">
-                →
+              <span className="eyebrow">
+                STUDENT PORTAL
               </span>
 
-            </button>
-          ))}
+              <h1>
+                Welcome back, {firstName}!{" "}
+                <span className="wave">👋</span>
+              </h1>
 
-        </section>
+              <p>
+                Here's your current placement overview.
+                Keep building your profile to improve your
+                placement readiness.
+              </p>
 
-        {/* =====================================================
-            PROFILE + ACADEMIC
-        ===================================================== */}
-        <section className="overview-grid">
+            </div>
 
-          {/* PROFILE COMPLETION */}
-          <div className="dashboard-card profile-card">
+            <div className="completion-card">
 
-            <div className="card-header">
+              <div className="completion-circle">
+                <svg
+                  width="72"
+                  height="72"
+                  viewBox="0 0 72 72"
+                >
+                  <circle
+                    cx="36"
+                    cy="36"
+                    r="30"
+                    className="circle-bg"
+                  />
+
+                  <circle
+                    cx="36"
+                    cy="36"
+                    r="30"
+                    className="circle-progress"
+                    style={{
+                      strokeDashoffset:
+                        188 -
+                        (188 *
+                          profileCompletion) /
+                          100,
+                    }}
+                  />
+                </svg>
+
+                <span>
+                  {profileCompletion}%
+                </span>
+              </div>
+
+              <div className="completion-text">
+                <strong>Profile Complete</strong>
+                <span>
+                  {profileCompletion < 100
+                    ? "Keep improving your profile"
+                    : "Your profile is complete"}
+                </span>
+              </div>
+
+            </div>
+
+          </section>
+
+          {/* STAT CARDS */}
+          <section className="stats-grid">
+
+            <StatCard
+              icon="academics"
+              label="Current CGPA"
+              value={cgpa}
+              type="success"
+              description="Academic performance"
+            />
+
+            <StatCard
+              icon="dashboard"
+              label="Current Semester"
+              value={semester}
+              type="blue"
+              description="Current semester"
+            />
+
+            <StatCard
+              icon="warning"
+              label="Backlogs"
+              value={backlogs}
+              type={
+                Number(backlogs) > 0
+                  ? "danger"
+                  : "success"
+              }
+              description={
+                Number(backlogs) > 0
+                  ? "Needs attention"
+                  : "No active backlogs"
+              }
+            />
+
+            <StatCard
+              icon="roadmap"
+              label="Passing Year"
+              value={passingYear}
+              type="purple"
+              description="Expected graduation"
+            />
+
+          </section>
+
+          {/* STUDENT INFORMATION */}
+          <section className="dashboard-card">
+
+            <div className="card-heading">
+
+              <div className="heading-icon profile-color">
+                <Icon name="profile" size={21} />
+              </div>
 
               <div>
-                <span className="section-label">
-                  PROFILE
+                <span className="section-eyebrow">
+                  STUDENT INFORMATION
                 </span>
 
-                <h2>
-                  Profile Completion
-                </h2>
-              </div>
+                <h2>Your Details</h2>
 
-              <strong className="percentage">
-                78%
-              </strong>
-
-            </div>
-
-            <p className="card-description">
-              Complete your profile to improve your placement
-              recommendations.
-            </p>
-
-            <div className="progress-container">
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: "78%" }}
-                ></div>
-              </div>
-            </div>
-
-            {/* MISSING PROFILE ITEMS */}
-            <div className="missing-profile">
-
-              <div className="missing-title">
-                <strong>Profile checklist</strong>
-
-                {missingItems.length > 0 && (
-                  <span>
-                    {missingItems.length} remaining
-                  </span>
-                )}
-              </div>
-
-              {missingItems.length > 0 ? (
-                <div className="missing-list">
-
-                  {missingItems.map((item) => (
-                    <button
-                      key={item.text}
-                      className="missing-item"
-                      onClick={() => navigate(item.path)}
-                    >
-                      <span className="missing-icon">
-                        {item.icon}
-                      </span>
-
-                      <span>{item.text}</span>
-
-                      <span className="missing-arrow">
-                        →
-                      </span>
-                    </button>
-                  ))}
-
-                </div>
-              ) : (
-                <div className="profile-complete-message">
-                  <span>✓</span>
-                  Your profile is complete.
-                </div>
-              )}
-
-            </div>
-
-            <button
-              className="outline-button"
-              onClick={() => navigate("/student/profile")}
-            >
-              Complete Profile →
-            </button>
-
-          </div>
-
-          {/* ACADEMIC OVERVIEW */}
-          <div className="dashboard-card academic-card">
-
-            <div className="card-header">
-
-              <div>
-                <span className="section-label">
-                  ACADEMICS
-                </span>
-
-                <h2>
-                  Academic Overview
-                </h2>
+                <p>
+                  Your basic profile information
+                </p>
               </div>
 
               <button
-                className="text-button"
+                className="outline-button"
+                onClick={() =>
+                  navigate("/student/profile")
+                }
+              >
+                <Icon name="edit" size={15} />
+                Edit Profile
+              </button>
+
+            </div>
+
+            <div className="info-grid">
+
+              <InfoItem
+                label="Full Name"
+                value={
+                  student?.name || "Not added"
+                }
+              />
+
+              <InfoItem
+                label="PRN"
+                value={
+                  student?.prn || "Not added"
+                }
+              />
+
+              <InfoItem
+                label="Email"
+                value={
+                  student?.email || "Not added"
+                }
+              />
+
+              <InfoItem
+                label="Phone"
+                value={
+                  student?.phone || "Not added"
+                }
+              />
+
+              <InfoItem
+                label="Branch"
+                value={
+                  student?.branch || "Not added"
+                }
+              />
+
+              <InfoItem
+                label="Department"
+                value={
+                  department
+                    ? department
+                    : "Add now →"
+                }
+                warning={!department}
+              />
+
+            </div>
+
+          </section>
+
+          {/* ACADEMIC PERFORMANCE */}
+          <section className="dashboard-card">
+
+            <div className="card-heading">
+
+              <div className="heading-icon academic-color">
+                <Icon
+                  name="academics"
+                  size={21}
+                />
+              </div>
+
+              <div>
+                <span className="section-eyebrow">
+                  ACADEMIC OVERVIEW
+                </span>
+
+                <h2>Academic Performance</h2>
+
+                <p>
+                  Your current academic snapshot
+                </p>
+              </div>
+
+              <button
+                className="outline-button"
                 onClick={() =>
                   navigate("/student/academics")
                 }
               >
-                View Details →
+                Manage Academics
+                <Icon name="arrow" size={15} />
               </button>
 
             </div>
 
-            <div className="academic-grid">
-
-              <div className="academic-item">
-                <span>10th Percentage</span>
-                <strong>89%</strong>
-              </div>
-
-              <div className="academic-item">
-                <span>12th Percentage</span>
-                <strong>91%</strong>
-              </div>
+            <div className="academic-summary">
 
               <div className="academic-item">
                 <span>Current CGPA</span>
-                <strong>8.67</strong>
+                <strong>{cgpa}</strong>
               </div>
 
               <div className="academic-item">
-                <span>Active Backlogs</span>
-                <strong>0</strong>
+                <span>Current Semester</span>
+                <strong>{semester}</strong>
+              </div>
+
+              <div className="academic-item">
+                <span>Backlogs</span>
+                <strong
+                  className={
+                    Number(backlogs) > 0
+                      ? "text-danger"
+                      : "text-success"
+                  }
+                >
+                  {backlogs}
+                </strong>
+              </div>
+
+              <div className="academic-item">
+                <span>Passing Year</span>
+                <strong>
+                  {passingYear}
+                </strong>
               </div>
 
             </div>
 
-          </div>
+          </section>
 
-        </section>
+          {/* QUICK ACTIONS */}
+          <section className="quick-actions-section">
 
-        {/* =====================================================
-            SEMESTER PERFORMANCE
-        ===================================================== */}
-        <section className="dashboard-card performance-card">
+            <div className="section-title">
 
-          <div className="card-header">
-
-            <div>
-              <span className="section-label">
-                ACADEMIC PERFORMANCE
+              <span className="section-eyebrow">
+                PLACEMENT PROFILE
               </span>
 
-              <h2>
-                Semester-wise Performance
-              </h2>
+              <h2>Quick Actions</h2>
+
+              <p>
+                Continue building your placement profile.
+              </p>
+
             </div>
 
-            <button
-              className="text-button"
-              onClick={() =>
-                navigate("/student/academics")
-              }
-            >
-              View All →
-            </button>
+            <div className="quick-actions-grid">
 
-          </div>
+              {quickActions.map((action) => (
+                <QuickAction
+                  key={action.title}
+                  icon={action.icon}
+                  title={action.title}
+                  description={
+                    action.description
+                  }
+                  onClick={() =>
+                    navigate(action.path)
+                  }
+                />
+              ))}
 
-          <div className="semester-table">
-
-            <div className="table-row table-heading">
-              <span>Semester</span>
-              <span>SGPA</span>
-              <span>Status</span>
             </div>
 
-            <div className="table-row">
-              <span>Semester 1</span>
-              <strong>8.20</strong>
+          </section>
 
-              <span className="status completed">
-                <span className="status-check">✓</span>
-                Completed
-              </span>
-            </div>
-
-            <div className="table-row">
-              <span>Semester 2</span>
-              <strong>8.45</strong>
-
-              <span className="status completed">
-                <span className="status-check">✓</span>
-                Completed
-              </span>
-            </div>
-
-            <div className="table-row">
-              <span>Semester 3</span>
-              <strong>8.60</strong>
-
-              <span className="status completed">
-                <span className="status-check">✓</span>
-                Completed
-              </span>
-            </div>
-
-            <div className="table-row">
-              <span>Semester 4</span>
-              <strong>8.72</strong>
-
-              <span className="status completed">
-                <span className="status-check">✓</span>
-                Completed
-              </span>
-            </div>
-
-            <div className="table-row">
-              <span>Semester 5</span>
-              <strong>8.80</strong>
-
-              <span className="status completed">
-                <span className="status-check">✓</span>
-                Completed
-              </span>
-            </div>
-
-            <div className="table-row">
-              <span>Semester 6</span>
-              <strong>8.67</strong>
-
-              <span className="status current">
-                <span className="current-dot"></span>
-                Current
-              </span>
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* =====================================================
-            QUICK ACTIONS
-        ===================================================== */}
-        <section className="dashboard-card quick-actions-card">
-
-          <div className="card-header">
-
-            <div>
-              <span className="section-label">
-                QUICK ACTIONS
-              </span>
-
-              <h2>
-                Continue Your Preparation
-              </h2>
-            </div>
-
-          </div>
-
-          <div className="quick-actions">
-
-            {/* RESUME */}
-            <button
-              onClick={() =>
-                navigate("/student/resume")
-              }
-              className="quick-action"
-            >
-              <span className="quick-action-icon">
-                ▤
-              </span>
-
-              <div>
-                <strong>Analyze Resume</strong>
-                <small>
-                  Improve your resume score
-                </small>
-              </div>
-            </button>
-
-            {/* SKILLS - RECOMMENDED */}
-            <button
-              onClick={() =>
-                navigate("/student/skills")
-              }
-              className="quick-action recommended"
-            >
-              <span className="quick-action-icon">
-                ◇
-              </span>
-
-              <div>
-                <div className="quick-action-title">
-                  <strong>Update Skills</strong>
-
-                  <span className="recommended-label">
-                    Recommended
-                  </span>
-                </div>
-
-                <small>
-                  Add or improve your skills
-                </small>
-              </div>
-            </button>
-
-            {/* PROJECT */}
-            <button
-              onClick={() =>
-                navigate("/student/projects")
-              }
-              className="quick-action"
-            >
-              <span className="quick-action-icon">
-                ◆
-              </span>
-
-              <div>
-                <strong>Add Project</strong>
-                <small>
-                  Build your project portfolio
-                </small>
-              </div>
-            </button>
-
-            {/* DRIVES */}
-            <button
-              onClick={() =>
-                navigate("/student/drives")
-              }
-              className="quick-action"
-            >
-              <span className="quick-action-icon">
-                ▥
-              </span>
-
-              <div>
-                <strong>View Drives</strong>
-                <small>
-                  Check eligible opportunities
-                </small>
-              </div>
-            </button>
-
-          </div>
-
-        </section>
-
-        {/* =====================================================
-            RECENT ACTIVITY
-        ===================================================== */}
-        <section className="dashboard-card activity-card">
-
-          <div className="card-header">
-
-            <div>
-              <span className="section-label">
-                ACTIVITY
-              </span>
-
-              <h2>
-                Recent Activity
-              </h2>
-            </div>
-
-            <span className="activity-count">
-              Latest updates
+          {/* FOOTER */}
+          <footer className="dashboard-footer">
+            <span>
+              CampusIQ • Student Placement Portal
             </span>
 
-          </div>
+            <span>
+              Keep learning. Keep building. 🚀
+            </span>
+          </footer>
 
-          <div className="activity-list">
-
-            {recentActivities.map((activity, index) => (
-              <button
-                key={index}
-                className="activity-item"
-                onClick={() =>
-                  navigate(activity.path)
-                }
-              >
-
-                <span className="activity-icon">
-                  {activity.icon}
-                </span>
-
-                <span className="activity-content">
-                  <strong>
-                    {activity.title}
-                  </strong>
-
-                  <small>
-                    {activity.time}
-                  </small>
-                </span>
-
-                <span className="activity-arrow">
-                  →
-                </span>
-
-              </button>
-            ))}
-
-          </div>
-
-        </section>
-
+        </div>
       </main>
     </div>
   );

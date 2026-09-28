@@ -5,15 +5,12 @@ import "./Auth.css";
 // CampusIQ Logo
 import campusiqLogo from "../../assets/campusiq-header.png";
 
-
 function Login() {
-
   const navigate = useNavigate();
 
-
-  /* =====================================================
-     STATE
-  ===================================================== */
+  // =====================================================
+  // STATE
+  // =====================================================
 
   const [role, setRole] = useState("student");
 
@@ -23,16 +20,13 @@ function Login() {
   });
 
   const [error, setError] = useState("");
-
   const [loading, setLoading] = useState(false);
 
-
-  /* =====================================================
-     HANDLE INPUT CHANGE
-  ===================================================== */
+  // =====================================================
+  // HANDLE INPUT CHANGE
+  // =====================================================
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -43,134 +37,215 @@ function Login() {
     setError("");
   };
 
-
-  /* =====================================================
-     HANDLE ROLE CHANGE
-  ===================================================== */
+  // =====================================================
+  // HANDLE ROLE CHANGE
+  // =====================================================
 
   const handleRoleChange = (selectedRole) => {
-
     setRole(selectedRole);
-
     setError("");
   };
 
-
-  /* =====================================================
-     HANDLE LOGIN
-  ===================================================== */
+  // =====================================================
+  // HANDLE LOGIN
+  // =====================================================
 
   const handleLogin = async (e) => {
-
     e.preventDefault();
-
     setError("");
 
+    // -----------------------------------------------------
+    // VALIDATION
+    // -----------------------------------------------------
 
-    /* ==========================================
-       VALIDATION
-    ========================================== */
+    const email = formData.email.trim();
 
-    if (!formData.email.trim()) {
-
+    if (!email) {
       setError("Please enter your college email.");
-
       return;
     }
-
 
     if (!formData.password) {
-
       setError("Please enter your password.");
-
       return;
     }
 
+    if (!role) {
+      setError("Please select your role.");
+      return;
+    }
 
     try {
-
       setLoading(true);
 
+      // ---------------------------------------------------
+      // CONNECT FRONTEND → BACKEND
+      // ---------------------------------------------------
 
-      /* ==========================================
-         TEMPORARY LOGIN
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
 
-         Later we will replace this with
-         your backend API.
-      ========================================== */
+          headers: {
+            "Content-Type": "application/json",
+          },
 
+          body: JSON.stringify({
+            email: email,
+            password: formData.password,
+            role: role,
+          }),
+        }
+      );
 
-      const user = {
+      // ---------------------------------------------------
+      // GET BACKEND RESPONSE
+      // ---------------------------------------------------
 
-        name: formData.email
-          .split("@")[0],
+      const data = await response.json();
 
-        email: formData.email,
+      console.log("Login response:", data);
 
-        role: role,
+      // ---------------------------------------------------
+      // HANDLE BACKEND ERROR
+      // ---------------------------------------------------
 
-      };
+      if (!response.ok) {
+        setError(
+          data.message ||
+            "Login failed. Please check your email, password and role."
+        );
+        return;
+      }
 
+      // ---------------------------------------------------
+      // CHECK TOKEN
+      // ---------------------------------------------------
 
-      /* ==========================================
-         SAVE USER TO LOCAL STORAGE
-      ========================================== */
+      if (!data.token) {
+        console.error("Token missing from backend response:", data);
+
+        setError(
+          "Login successful, but authentication token was not received."
+        );
+
+        return;
+      }
+
+      // ---------------------------------------------------
+      // CHECK USER
+      // ---------------------------------------------------
+
+      if (!data.user) {
+        console.error("User data missing from backend response:", data);
+
+        setError(
+          "Login successful, but user information was not received."
+        );
+
+        return;
+      }
+
+      // ---------------------------------------------------
+      // CLEAR OLD LOGIN DATA
+      // -----------------------------------------------------
+
+      localStorage.removeItem("campusiqToken");
+      localStorage.removeItem("campusiqUser");
+
+      // -----------------------------------------------------
+      // SAVE JWT TOKEN
+      // IMPORTANT:
+      // StudentDashboard/Auth middleware should use "token"
+      // -----------------------------------------------------
+
+      localStorage.setItem("token", data.token);
+
+      // -----------------------------------------------------
+      // SAVE USER INFORMATION
+      // IMPORTANT:
+      // StudentLayout uses "user"
+      // -----------------------------------------------------
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      // -----------------------------------------------------
+      // OPTIONAL BACKWARD COMPATIBILITY
+      // -----------------------------------------------------
+      // Keep these temporarily if any old CampusIQ component
+      // still uses these names.
+
+      localStorage.setItem(
+        "campusiqToken",
+        data.token
+      );
 
       localStorage.setItem(
         "campusiqUser",
-        JSON.stringify(user)
+        JSON.stringify(data.user)
       );
 
+      // -----------------------------------------------------
+      // VERIFY DATA WAS SAVED
+      // -----------------------------------------------------
 
-      /* ==========================================
-         REDIRECT BASED ON ROLE
-      ========================================== */
+      console.log(
+        "Token saved:",
+        !!localStorage.getItem("token")
+      );
 
-      if (role === "student") {
+      console.log(
+        "User saved:",
+        localStorage.getItem("user")
+      );
 
-        navigate("/student/dashboard");
+      // -----------------------------------------------------
+      // ROLE-BASED REDIRECT
+      // -----------------------------------------------------
 
+      if (data.user.role === "student") {
+        navigate("/student/dashboard", {
+          replace: true,
+        });
+      } else if (data.user.role === "tpo") {
+        navigate("/admin/dashboard", {
+          replace: true,
+        });
       } else {
-
-        navigate("/admin/dashboard");
-
+        setError(
+          "Invalid user role received from server."
+        );
       }
 
-
     } catch (err) {
+      console.error("Login error:", err);
 
       setError(
-        err.message ||
-        "Unable to login. Please try again."
+        "Unable to connect to CampusIQ server. Make sure the backend is running on http://localhost:5000."
       );
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-
-  /* =====================================================
-     PAGE
-  ===================================================== */
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
-
     <div className="auth-page login-page">
 
-
       <div className="auth-card login-card">
-
 
         {/* =================================================
             HEADER
         ================================================= */}
 
         <div className="auth-header login-header">
-
 
           {/* CampusIQ Logo */}
 
@@ -179,42 +254,32 @@ function Login() {
             className="campusiq-brand"
             aria-label="CampusIQ Home"
           >
-
             <img
               src={campusiqLogo}
               alt="CampusIQ"
               className="campusiq-logo"
             />
-
           </Link>
-
 
           {/* Heading */}
 
           <h1 className="auth-heading">
-
             Welcome Back
-
           </h1>
-
 
           {/* Subtitle */}
 
           <p className="auth-subtitle">
-
             Login to continue to your CampusIQ portal.
-
           </p>
 
         </div>
-
 
         {/* =================================================
             ROLE SWITCHER
         ================================================= */}
 
         <div className="role-switcher login-role-switcher">
-
 
           {/* STUDENT */}
 
@@ -229,7 +294,6 @@ function Login() {
               handleRoleChange("student")
             }
           >
-
             <span aria-hidden="true">
               🎓
             </span>
@@ -237,9 +301,7 @@ function Login() {
             <span>
               Student
             </span>
-
           </button>
-
 
           {/* TPO / ADMIN */}
 
@@ -254,7 +316,6 @@ function Login() {
               handleRoleChange("tpo")
             }
           >
-
             <span aria-hidden="true">
               🏢
             </span>
@@ -262,11 +323,9 @@ function Login() {
             <span>
               TPO / Admin
             </span>
-
           </button>
 
         </div>
-
 
         {/* =================================================
             LOGIN FORM
@@ -274,33 +333,24 @@ function Login() {
 
         <form onSubmit={handleLogin}>
 
-
           {/* =================================================
               EMAIL
           ================================================= */}
 
           <div className="form-field login-field">
 
-
             <label htmlFor="email">
-
               College Email
-
             </label>
 
-
             <div className="input-wrapper">
-
 
               <span
                 className="input-icon"
                 aria-hidden="true"
               >
-
                 ✉
-
               </span>
-
 
               <input
                 id="email"
@@ -316,33 +366,24 @@ function Login() {
 
           </div>
 
-
           {/* =================================================
               PASSWORD
           ================================================= */}
 
           <div className="form-field login-field">
 
-
             <label htmlFor="password">
-
               Password
-
             </label>
 
-
             <div className="input-wrapper">
-
 
               <span
                 className="input-icon"
                 aria-hidden="true"
               >
-
                 🔒
-
               </span>
-
 
               <input
                 id="password"
@@ -358,7 +399,6 @@ function Login() {
 
           </div>
 
-
           {/* =================================================
               FORGOT PASSWORD
           ================================================= */}
@@ -366,41 +406,28 @@ function Login() {
           <div className="forgot-link">
 
             <Link to="/forgot-password">
-
               Forgot password?
-
             </Link>
 
           </div>
-
 
           {/* =================================================
               ERROR MESSAGE
           ================================================= */}
 
           {error && (
-
             <div className="auth-error">
 
-
               <span aria-hidden="true">
-
                 !
-
               </span>
-
 
               <span>
-
                 {error}
-
               </span>
 
-
             </div>
-
           )}
-
 
           {/* =================================================
               LOGIN BUTTON
@@ -411,17 +438,13 @@ function Login() {
             className="auth-submit login-submit"
             disabled={loading}
           >
-
             {loading
               ? "Logging in..."
               : "Login"
             }
-
           </button>
 
-
         </form>
-
 
         {/* =================================================
             CREATE ACCOUNT
@@ -432,13 +455,10 @@ function Login() {
           Don't have an account?{" "}
 
           <Link to="/register">
-
             Create Account
-
           </Link>
 
         </p>
-
 
         {/* =================================================
             BACK TO HOME
@@ -448,19 +468,13 @@ function Login() {
           to="/"
           className="back-home"
         >
-
           ← Back to Home
-
         </Link>
-
 
       </div>
 
     </div>
-
   );
-
 }
-
 
 export default Login;

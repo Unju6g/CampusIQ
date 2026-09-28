@@ -1,0 +1,155 @@
+.application-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #061526;
+  color: #f5f8ff;
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.application-header span {
+  color: #20a9f5;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.application-header h1 {
+  margin: 6px 0;
+  font-size: 32px;
+}
+
+.application-header p {
+  color: #82a8c9;
+  margin: 0;
+}
+
+.application-back {
+  height: 42px;
+  padding: 0 16px;
+  background: #0c2d43;
+  border: 1px solid #195475;
+  color: #22a8f5;
+  border-radius: 8px;
+}
+
+.application-card {
+  background: #0c2d43;
+  border: 1px solid #195475;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.application-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.application-toolbar input,
+.application-toolbar select {
+  background: #071c2e;
+  border: 1px solid #24516e;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: white;
+}
+
+.application-toolbar input {
+  flex: 1;
+}
+
+.application-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.application-table th {
+  text-align: left;
+  color: #7099b8;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 14px;
+  border-bottom: 1px solid #20516d;
+}
+
+.application-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #173e57;
+}
+
+.application-table tbody tr:hover {
+  background: #10364d;
+}
+
+.application-student {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.application-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.a-0 {
+  background: #17688c;
+}
+
+.a-1 {
+  background: #62527d;
+}
+
+.a-2 {
+  background: #39745d;
+}
+
+.a-3 {
+  background: #80594b;
+}
+
+.application-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.application-status.shortlisted {
+  background: #493719;
+  color: #ffc267;
+}
+
+.application-status.under-review {
+  background: #263746;
+  color: #d8e2ec;
+  border: 1px solid #496074;
+}
+
+.application-status.applied {
+  background: #103d5d;
+  color: #4dbaff;
+}
+
+.application-status.rejected {
+  background: #45272b;
+  color: #ff8790;
+}
+
+.application-view {
+  background: #0b354d;
+  border: 1px solid #1d6080;
+  color: #25a9f5;
+  padding: 7px 12px;
+  border-radius: 7px;
+}
